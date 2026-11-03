@@ -15,23 +15,36 @@ class Category {
     required this.iconData,
   });
 
+  static const Map<String, IconData> categoryIconMap = {
+    'clothing': Icons.checkroom_rounded,
+    'jeans': Icons.dry_cleaning_rounded,
+    'tops': Icons.layers_rounded,
+    'dresses': Icons.filter_vintage_rounded,
+    'trousers': Icons.style_rounded,
+    'socks': Icons.all_inclusive_rounded,
+    'footwear': Icons.skateboarding_rounded,
+    'accessories': Icons.watch_rounded,
+  };
+
+  static IconData getIconForCategory(String id) {
+    return categoryIconMap[id.toLowerCase()] ?? Icons.category_rounded;
+  }
+
   Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
     'description': description,
     'imagePath': imagePath,
-    'iconCode': iconData.codePoint,
   };
 
   factory Category.fromJson(Map<String, dynamic> json) {
+    final catId = json['id'] as String;
     return Category(
-      id: json['id'] as String,
+      id: catId,
       name: json['name'] as String,
       description: json['description'] as String? ?? '',
       imagePath: json['imagePath'] as String? ?? '',
-      iconData: json['iconCode'] != null
-          ? IconData(json['iconCode'] as int, fontFamily: 'MaterialIcons')
-          : Icons.category_rounded,
+      iconData: getIconForCategory(catId),
     );
   }
 
