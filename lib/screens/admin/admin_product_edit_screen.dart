@@ -196,11 +196,13 @@ class _AdminProductEditScreenState extends State<AdminProductEditScreen> {
               const SizedBox(height: 14),
 
               DropdownButtonFormField<String>(
-                value: store.categories.any((c) => c.id == _selectedCategoryId)
+                initialValue: store.categories.any(
+                  (c) => c.id == _selectedCategoryId,
+                )
                     ? _selectedCategoryId
                     : (store.categories.isNotEmpty
-                          ? store.categories.first.id
-                          : null),
+                        ? store.categories.first.id
+                        : null),
                 decoration: const InputDecoration(
                   labelText: 'Category',
                   border: OutlineInputBorder(),
