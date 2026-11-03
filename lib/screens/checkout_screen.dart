@@ -185,28 +185,34 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              RadioListTile<String>(
-                value: 'standard',
+              RadioGroup<String>(
                 groupValue: cart.shippingMethod,
-                onChanged: (val) {
-                  if (val != null) cart.setShippingMethod(val);
+                onChanged: (value) {
+                  if (value != null) cart.setShippingMethod(value);
                 },
-                title: const Text('Standard Delivery (3-5 Business Days)'),
-                subtitle: Text(
-                  cart.subtotal >= StoreConfig.freeShippingThreshold
-                      ? 'FREE (Orders over \$50)'
-                      : '${StoreConfig.currencySymbol}${StoreConfig.standardShippingFee.toStringAsFixed(2)}',
-                ),
-              ),
-              RadioListTile<String>(
-                value: 'express',
-                groupValue: cart.shippingMethod,
-                onChanged: (val) {
-                  if (val != null) cart.setShippingMethod(val);
-                },
-                title: const Text('Express Delivery (1-2 Business Days)'),
-                subtitle: Text(
-                  '${StoreConfig.currencySymbol}${StoreConfig.expressShippingFee.toStringAsFixed(2)}',
+                child: Column(
+                  children: [
+                    RadioListTile<String>(
+                      value: 'standard',
+                      title: const Text(
+                        'Standard Delivery (3-5 Business Days)',
+                      ),
+                      subtitle: Text(
+                        cart.subtotal >= StoreConfig.freeShippingThreshold
+                            ? 'FREE (Orders over \$50)'
+                            : '${StoreConfig.currencySymbol}${StoreConfig.standardShippingFee.toStringAsFixed(2)}',
+                      ),
+                    ),
+                    RadioListTile<String>(
+                      value: 'express',
+                      title: const Text(
+                        'Express Delivery (1-2 Business Days)',
+                      ),
+                      subtitle: Text(
+                        '${StoreConfig.currencySymbol}${StoreConfig.expressShippingFee.toStringAsFixed(2)}',
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 24),
@@ -215,17 +221,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              _buildPaymentOption(
-                'Cash on Delivery (Demo)',
-                Icons.local_atm_outlined,
-              ),
-              _buildPaymentOption(
-                'Demo Credit / Debit Card (Simulated)',
-                Icons.credit_card_outlined,
-              ),
-              _buildPaymentOption(
-                'Demo Mobile Wallet / Pay (Simulated)',
-                Icons.account_balance_wallet_outlined,
+              RadioGroup<String>(
+                groupValue: _paymentMethod,
+                onChanged: (value) {
+                  if (value != null) setState(() => _paymentMethod = value);
+                },
+                child: Column(
+                  children: [
+                    _buildPaymentOption(
+                      'Cash on Delivery (Demo)',
+                      Icons.local_atm_outlined,
+                    ),
+                    _buildPaymentOption(
+                      'Demo Credit / Debit Card (Simulated)',
+                      Icons.credit_card_outlined,
+                    ),
+                    _buildPaymentOption(
+                      'Demo Mobile Wallet / Pay (Simulated)',
+                      Icons.account_balance_wallet_outlined,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 24),
               Container(
@@ -353,10 +369,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget _buildPaymentOption(String title, IconData icon) {
     return RadioListTile<String>(
       value: title,
-      groupValue: _paymentMethod,
-      onChanged: (val) {
-        if (val != null) setState(() => _paymentMethod = val);
-      },
       secondary: Icon(icon, color: StoreConfig.primaryColor),
       title: Text(title, style: const TextStyle(fontSize: 14)),
     );
