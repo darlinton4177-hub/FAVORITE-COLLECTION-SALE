@@ -19,9 +19,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int _secretTapCount = 0;
   Map<String, dynamic>? _liveProfile;
-  bool _isLoadingProfile = false;
-
-  @override
+@override
   void initState() {
     super.initState();
     _loadProfile();
@@ -33,7 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return;
     }
 
-    setState(() => _isLoadingProfile = true);
     try {
       final profile = await AuthService.fetchProfile();
       if (mounted) {
@@ -43,8 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     } finally {
       if (mounted) {
-        setState(() => _isLoadingProfile = false);
-      }
+        }
     }
   }
 

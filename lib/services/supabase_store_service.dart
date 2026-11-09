@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/category.dart';
 import '../models/product.dart';
@@ -6,14 +6,6 @@ import '../models/banner_item.dart';
 import 'local_storage_service.dart';
 
 class SupabaseStoreService {
-  static bool get _isClientReady {
-    try {
-      return Supabase.instance.client.supabaseUrl.isNotEmpty;
-    } catch (_) {
-      return false;
-    }
-  }
-
   static SupabaseClient? get _client {
     try {
       return Supabase.instance.client;
@@ -21,6 +13,8 @@ class SupabaseStoreService {
       return null;
     }
   }
+
+  static bool get _isClientReady => _client != null;
 
   /// Fetches live categories from Supabase, updates local cache, and falls back to cache on failure
   static Future<List<Category>> fetchCategories() async {

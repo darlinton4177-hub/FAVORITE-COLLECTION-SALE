@@ -1,5 +1,4 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/user_profile.dart';
 
 class AuthService {
   static final SupabaseClient _client = Supabase.instance.client;

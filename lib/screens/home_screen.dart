@@ -122,16 +122,13 @@ class HomeStorefrontTab extends StatelessWidget {
         titleSpacing: 16,
         title: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: StoreConfig.primaryColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.local_mall_rounded,
-                color: Colors.white,
-                size: 20,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/images/logo.png',
+                width: 34,
+                height: 34,
+                fit: BoxFit.cover,
               ),
             ),
             const SizedBox(width: 10),

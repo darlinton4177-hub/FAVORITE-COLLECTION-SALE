@@ -69,7 +69,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Demonstration order recorded locally! You can view this order in your Account history or manage it in the Admin Panel.',
+                      'Thank you for your order! You can track your order progress in your Account history.',
                       style: TextStyle(fontSize: 12),
                     ),
                   ),

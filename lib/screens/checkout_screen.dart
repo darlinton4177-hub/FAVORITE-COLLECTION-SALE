@@ -23,7 +23,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   late TextEditingController _cityController;
   late TextEditingController _zipController;
 
-  String _paymentMethod = 'Cash on Delivery (Demo)';
+  String _paymentMethod = 'Cash on Delivery';
   bool _isProcessing = false;
 
   @override
@@ -59,7 +59,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Checkout Demonstration')),
+      appBar: AppBar(title: const Text('Checkout')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -217,7 +217,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
               const SizedBox(height: 24),
               const Text(
-                '3. Demo Payment Method',
+                '3. Payment Method',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
@@ -229,15 +229,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: Column(
                   children: [
                     _buildPaymentOption(
-                      'Cash on Delivery (Demo)',
+                      'Cash on Delivery',
                       Icons.local_atm_outlined,
                     ),
                     _buildPaymentOption(
-                      'Demo Credit / Debit Card (Simulated)',
+                      'Credit / Debit Card',
                       Icons.credit_card_outlined,
                     ),
                     _buildPaymentOption(
-                      'Demo Mobile Wallet / Pay (Simulated)',
+                      'Mobile Money (NGN / XAF)',
                       Icons.account_balance_wallet_outlined,
                     ),
                   ],
@@ -350,7 +350,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   child: _isProcessing
                       ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
-                          'Complete Demo Order (${StoreConfig.currencySymbol}${cart.totalAmount.toStringAsFixed(2)})',
+                          'Place Order (${StoreConfig.currencySymbol}${cart.totalAmount.toStringAsFixed(2)})',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

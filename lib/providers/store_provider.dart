@@ -39,15 +39,9 @@ class StoreProvider extends ChangeNotifier {
     _wishlistIds = await LocalStorageService.loadWishlist();
 
     // Fetch live from Supabase (with automatic fallback to local cache)
-    final results = await Future.wait([
-      SupabaseStoreService.fetchBanners(),
-      SupabaseStoreService.fetchCategories(),
-      SupabaseStoreService.fetchProducts(),
-    ]);
-
-    _banners = results[0] as List<BannerItem>;
-    _categories = results[1] as List<Category>;
-    _products = results[2] as List<Product>;
+    _banners = await SupabaseStoreService.fetchBanners();
+    _categories = await SupabaseStoreService.fetchCategories();
+    _products = await SupabaseStoreService.fetchProducts();
 
     _isLoading = false;
     notifyListeners();

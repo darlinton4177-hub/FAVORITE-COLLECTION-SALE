@@ -29,10 +29,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           'Unlock flash discounts, promo codes, and fast shipping inspired by modern multi-category shopping.',
     },
     {
-      'icon': Icons.offline_pin_rounded,
-      'title': 'Seamless Offline Demo',
+      'icon': Icons.verified_user_rounded,
+      'title': 'Live Marketplace Shopping',
       'desc':
-          'Interactive simulation with persistent local cart, orders, and administrative inventory control.',
+          'Directly synchronized with Supabase cloud catalog, real-time deals, and multi-currency pricing in NGN & XAF.',
     },
   ];
 
