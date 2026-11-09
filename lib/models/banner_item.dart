@@ -47,10 +47,10 @@ class BannerItem {
     return BannerItem(
       id: json['id'] as String,
       title: json['title'] as String,
-      subtitle: json['subtitle'] as String? ?? '',
-      imagePath: json['imagePath'] as String? ?? '',
-      targetCategoryId: json['targetCategoryId'] as String? ?? '',
-      badge: json['badge'] as String? ?? 'OFFER',
+      subtitle: (json['subtitle'] ?? '') as String,
+      imagePath: (json['image_path'] ?? json['imagePath'] ?? '') as String,
+      targetCategoryId: (json['target_category_id'] ?? json['targetCategoryId'] ?? '') as String,
+      badge: (json['badge'] ?? 'OFFER') as String,
     );
   }
 }

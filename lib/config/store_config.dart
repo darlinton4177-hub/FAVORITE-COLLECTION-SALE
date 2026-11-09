@@ -1,36 +1,31 @@
 import 'package:flutter/material.dart';
 
 class StoreConfig {
-  static const String appName = 'Favorite Collection Sale';
-  static const String appTagline =
-      'Discover Your Style. Premium Fashion & Marketplace Deals.';
+  static const String appName = 'Favorite Collection';
+  static const String appTagline = 'Shop More. Pay Less.';
   static const String storeDescription =
-      'A premium fashion-shopping app for discovering and buying stylish clothing, '
-      'jeans, tops, dresses, shirts, trousers, socks, footwear, and fashion accessories. '
-      'Enjoy curated collections, flash deals, verified quality, and seamless demonstration shopping.';
+      'Favorite Collection - Discover Your Style. Premium Fashion & Marketplace Deals. '
+      'Enjoy curated collections, flash deals, verified quality, and seamless online shopping.';
 
-  static const String storeEmail = 'support@favoritecollectionsale.com';
-  static const String storePhone = '+1 (800) 555-FASHION';
-  static const String storeAddress =
-      'Fashion Plaza, 500 Avenue of Style, New York, NY';
-  static const String currencySymbol = '\$';
-  static const String currencyCode = 'USD';
-  static const double freeShippingThreshold = 50.0;
-  static const double standardShippingFee = 4.99;
-  static const double expressShippingFee = 12.99;
-  static const double estimatedTaxRate = 0.08;
+  static const String storeEmail = 'darlinton4177@gmail.com';
+  static const String storePhone = '+234 (800) 555-STYLE';
+  static const String storeAddress = 'Nigeria & Cameroon';
+  
+  // Master Currency Settings (Nigeria NGN)
+  static const String currencySymbol = '₦';
+  static const String currencyCode = 'NGN';
+  static const double freeShippingThreshold = 50000.0; // ₦50,000
+  static const double standardShippingFee = 2500.0;     // ₦2,500
+  static const double expressShippingFee = 6500.0;      // ₦6,500
+  static const double estimatedTaxRate = 0.075;         // 7.5% VAT
 
   // Demonstration Admin PIN
   static const String demoAdminPin = '1234';
 
   // Primary Theme Colors (Material 3 with Temu/Jumia warm energetic vibrancy & modern sleek chic)
-  static const Color primaryColor = Color(
-    0xFFE65100,
-  ); // Warm vibrant orange/terracotta
-  static const Color secondaryColor = Color(
-    0xFF0D47A1,
-  ); // Deep stylish navy blue
-  static const Color accentColor = Color(0xFFFF9800); // Amber orange accent
+  static const Color primaryColor = Color(0xFFE65100);   // Warm vibrant orange/terracotta
+  static const Color secondaryColor = Color(0xFF0D47A1); // Deep stylish navy blue
+  static const Color accentColor = Color(0xFFFF9800);    // Amber orange accent
   static const Color surfaceColorLight = Color(0xFFF9F9FB);
   static const Color cardColorLight = Colors.white;
   static const Color scaffoldDark = Color(0xFF121212);
@@ -40,9 +35,9 @@ class StoreConfig {
   static const String returnPolicy =
       '30-day hassle-free returns on unworn fashion items with original tags intact.';
   static const String shippingPolicy =
-      'Standard 3-5 business days shipping. Express 1-2 business days shipping available. Free standard shipping on orders over \$50.';
+      'Standard 2-4 business days delivery across Nigeria and Cameroon. Express delivery available. Free shipping on orders over ₦50,000.';
   static const String privacyPolicy =
-      'We respect your privacy. This demonstration app operates securely and stores preferences locally on your device.';
+      'We respect your privacy. All customer data and payment transactions are secured with Supabase enterprise encryption.';
   static const String termsOfService =
-      'This application is an interactive ecommerce demonstration. Transactions simulated in this app do not charge real payment methods.';
+      'Favorite Collection provides premium marketplace shopping with multi-currency checkout in NGN and XAF.';
 }

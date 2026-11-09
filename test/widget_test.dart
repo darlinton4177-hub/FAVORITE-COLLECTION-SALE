@@ -16,10 +16,10 @@ void main() {
 
   group('Store Configuration and Demo Data Tests', () {
     test('Store configuration branding is set properly', () {
-      expect(StoreConfig.appName, 'Favorite Collection Sale');
+      expect(StoreConfig.appName, 'Favorite Collection');
       expect(StoreConfig.demoAdminPin, '1234');
-      expect(StoreConfig.currencySymbol, '\$');
-      expect(StoreConfig.freeShippingThreshold, 50.0);
+      expect(StoreConfig.currencySymbol, '₦');
+      expect(StoreConfig.freeShippingThreshold, 50000.0);
     });
 
     test('Initial fashion categories contain required segments', () {

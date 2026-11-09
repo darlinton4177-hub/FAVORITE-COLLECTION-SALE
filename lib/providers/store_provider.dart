@@ -4,6 +4,7 @@ import '../models/product.dart';
 import '../models/category.dart';
 import '../models/banner_item.dart';
 import '../services/local_storage_service.dart';
+import '../services/supabase_store_service.dart';
 
 class StoreProvider extends ChangeNotifier {
   List<Product> _products = [];
@@ -35,12 +36,18 @@ class StoreProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    _products = await LocalStorageService.loadProducts();
-    _categories = List<Category>.from(
-      await LocalStorageService.loadCategories(),
-    );
-    _banners = await LocalStorageService.loadBanners();
     _wishlistIds = await LocalStorageService.loadWishlist();
+
+    // Fetch live from Supabase (with automatic fallback to local cache)
+    final results = await Future.wait([
+      SupabaseStoreService.fetchBanners(),
+      SupabaseStoreService.fetchCategories(),
+      SupabaseStoreService.fetchProducts(),
+    ]);
+
+    _banners = results[0] as List<BannerItem>;
+    _categories = results[1] as List<Category>;
+    _products = results[2] as List<Product>;
 
     _isLoading = false;
     notifyListeners();

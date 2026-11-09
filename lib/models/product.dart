@@ -65,33 +65,33 @@ class Product {
     return Product(
       id: json['id'] as String,
       title: json['title'] as String,
-      description: json['description'] as String? ?? '',
-      categoryId: json['categoryId'] as String,
+      description: (json['description'] ?? '') as String,
+      categoryId: (json['category_id'] ?? json['categoryId'] ?? '') as String,
       price: (json['price'] as num).toDouble(),
       originalPrice:
-          (json['originalPrice'] as num?)?.toDouble() ??
+          ((json['original_price'] ?? json['originalPrice']) as num?)?.toDouble() ??
           (json['price'] as num).toDouble(),
       rating: (json['rating'] as num?)?.toDouble() ?? 4.8,
-      reviewCount: json['reviewCount'] as int? ?? 50,
-      stock: json['stock'] as int? ?? 10,
+      reviewCount: (json['review_count'] ?? json['reviewCount'] ?? 50) as int,
+      stock: (json['stock'] as int?) ?? 10,
       images:
           (json['images'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
       availableSizes:
-          (json['availableSizes'] as List<dynamic>?)
+          ((json['available_sizes'] ?? json['availableSizes']) as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
       availableColors:
-          (json['availableColors'] as List<dynamic>?)
+          ((json['available_colors'] ?? json['availableColors']) as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
-      isFeatured: json['isFeatured'] as bool? ?? false,
-      isFlashDeal: json['isFlashDeal'] as bool? ?? false,
-      badge: json['badge'] as String? ?? '',
+      isFeatured: (json['is_featured'] ?? json['isFeatured'] ?? false) as bool,
+      isFlashDeal: (json['is_flash_deal'] ?? json['isFlashDeal'] ?? false) as bool,
+      badge: (json['badge'] ?? '') as String,
       specifications:
           (json['specifications'] as Map<String, dynamic>?)?.map(
             (k, v) => MapEntry(k, v.toString()),

@@ -38,12 +38,12 @@ class Category {
   };
 
   factory Category.fromJson(Map<String, dynamic> json) {
-    final iconCode = json['iconCode'] as int?;
+    final iconCode = (json['icon_code'] ?? json['iconCode']) as int?;
     return Category(
       id: json['id'] as String,
       name: json['name'] as String,
-      description: json['description'] as String? ?? '',
-      imagePath: json['imagePath'] as String? ?? '',
+      description: (json['description'] ?? '') as String,
+      imagePath: (json['image_path'] ?? json['imagePath'] ?? '') as String,
       iconData: _knownIcons[iconCode] ?? Icons.category_rounded,
     );
   }

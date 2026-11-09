@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'config/store_config.dart';
+import 'config/supabase_config.dart';
 import 'providers/store_provider.dart';
 import 'providers/cart_provider.dart';
 import 'providers/order_provider.dart';
@@ -10,6 +12,12 @@ import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  await Supabase.initialize(
+    url: SupabaseConfig.url,
+    anonKey: SupabaseConfig.anonKey,
+  );
+
   runApp(const FavoriteCollectionSaleApp());
 }
 
