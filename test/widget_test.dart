@@ -57,8 +57,8 @@ void main() {
         title: 'Denim Jacket',
         description: 'Test jacket',
         categoryId: 'clothing',
-        price: 40.0,
-        originalPrice: 60.0,
+        price: 30000.0,
+        originalPrice: 45000.0,
         stock: 5,
         images: [],
       );
@@ -67,7 +67,7 @@ void main() {
       expect(cart.itemCount, 0);
       expect(cart.subtotal, 0.0);
 
-      // Add 1 item
+      // Add 1 item (30,000 < 50,000 -> standard shipping fee applies)
       cart.addToCart(
         product,
         quantity: 1,
@@ -75,11 +75,10 @@ void main() {
         selectedColor: 'Blue',
       );
       expect(cart.itemCount, 1);
-      expect(cart.subtotal, 40.0);
-      // Below $50 threshold -> standard shipping applied
+      expect(cart.subtotal, 30000.0);
       expect(cart.shippingFee, StoreConfig.standardShippingFee);
 
-      // Add another identical item (should increment quantity)
+      // Add another identical item (60,000 > 50,000 threshold -> free shipping)
       cart.addToCart(
         product,
         quantity: 1,
@@ -87,19 +86,18 @@ void main() {
         selectedColor: 'Blue',
       );
       expect(cart.itemCount, 2);
-      expect(cart.subtotal, 80.0);
-      // Over $50 threshold -> free shipping
+      expect(cart.subtotal, 60000.0);
       expect(cart.shippingFee, 0.0);
 
       // Apply coupon FAVORITE10 (10% off)
       final applied = cart.applyCoupon('FAVORITE10');
       expect(applied, true);
-      expect(cart.discount, 8.0); // 10% of 80 is 8
+      expect(cart.discount, 6000.0); // 10% of 60,000 is 6,000
 
       // Verify tax & total
-      final expectedTax = (80.0 - 8.0) * StoreConfig.estimatedTaxRate;
+      final expectedTax = (60000.0 - 6000.0) * StoreConfig.estimatedTaxRate;
       expect(cart.estimatedTax, closeTo(expectedTax, 0.001));
-      expect(cart.totalAmount, closeTo(72.0 + expectedTax, 0.001));
+      expect(cart.totalAmount, closeTo(54000.0 + expectedTax, 0.001));
 
       // Remove item
       final key = cart.cartList.first.uniqueId;
@@ -148,7 +146,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Slim Fit Denim'), findsWidgets);
-      expect(find.text('\$49.99'), findsOneWidget);
+      expect(find.text('${StoreConfig.currencySymbol}49.99'), findsOneWidget);
       expect(find.text('SALE'), findsOneWidget);
       expect(find.byIcon(Icons.add_shopping_cart_rounded), findsOneWidget);
     });
