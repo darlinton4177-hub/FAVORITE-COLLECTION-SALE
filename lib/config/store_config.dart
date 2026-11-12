@@ -19,7 +19,7 @@ class StoreConfig {
   static const double expressShippingFee = 6500.0;      // ₦6,500
   static const double estimatedTaxRate = 0.075;         // 7.5% VAT
 
-  // Demonstration Admin PIN
+  // Admin PIN (change before production deployment)
   static const String demoAdminPin = '1234';
 
   // Primary Theme Colors (Material 3 with Temu/Jumia warm energetic vibrancy & modern sleek chic)

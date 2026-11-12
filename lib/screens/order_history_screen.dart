@@ -34,7 +34,7 @@ class OrderHistoryScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Place a demonstration order to see it tracked here!',
+                    'Place your first order and it will appear here.',
                   ),
                 ],
               ),

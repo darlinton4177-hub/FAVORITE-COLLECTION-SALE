@@ -480,7 +480,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             SizedBox(height: 4),
                             Text(
-                              'Demo Secure',
+                              'Secure',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,

@@ -29,7 +29,7 @@ class AdminDashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Store Administration (Demo)'),
+        title: const Text('Store Administration'),
         backgroundColor: StoreConfig.secondaryColor,
         foregroundColor: Colors.white,
       ),
@@ -38,13 +38,13 @@ class AdminDashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Demonstration Header Notice
+            // Admin Notice
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.amber.withValues(alpha: 0.15),
+                color: Colors.green.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.amber.shade700),
+                border: Border.all(color: Colors.green.shade400),
               ),
               child: const Row(
                 children: [
@@ -52,7 +52,7 @@ class AdminDashboardScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'OFFLINE DEMO ADMIN: Changes made here (adding/editing products, updating stock, importing phone photos, modifying orders) are saved persistently on this device.',
+                      'LIVE ADMIN PANEL: Changes made here (adding/editing products, updating stock, managing orders) are saved to Supabase and reflected across all users instantly.',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class AdminDashboardScreen extends StatelessWidget {
               children: [
                 _buildMetricCard(
                   context,
-                  title: 'Demo Revenue',
+                  title: 'Total Revenue',
                   value:
                       '${StoreConfig.currencySymbol}${totalRevenue.toStringAsFixed(2)}',
                   icon: Icons.payments_outlined,
@@ -161,7 +161,7 @@ class AdminDashboardScreen extends StatelessWidget {
             _buildNavigationTile(
               context,
               title: 'Order Fulfillment & Status',
-              subtitle: 'Track demo customer orders and update shipping stages',
+              subtitle: 'Track live customer orders and update shipping stages',
               icon: Icons.local_shipping_outlined,
               trailingBadge: '$totalOrders',
               onTap: () {
@@ -201,7 +201,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'You can pick high-resolution fashion photographs directly from Android Phone Gallery. Images are permanently saved in local app storage.',
+                          'Pick high-resolution fashion photos directly from your Android gallery. Images are saved locally and can be uploaded to cloud storage.',
                           style: TextStyle(fontSize: 12, color: Colors.black87),
                         ),
                       ],

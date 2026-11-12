@@ -56,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            '${3 - _secretTapCount} more taps to open Admin Panel demo',
+            '${3 - _secretTapCount} more taps to open Admin Panel',
           ),
           duration: const Duration(seconds: 1),
           behavior: SnackBarBehavior.floating,
@@ -329,7 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 12),
 
-            // Demo Secret Admin fallback (for testing offline)
+            // Secret Admin Panel fallback (for non-admin users)
             if (!isAdmin)
               Container(
                 decoration: BoxDecoration(
@@ -343,9 +343,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Icons.admin_panel_settings_outlined,
                     color: Colors.blueGrey,
                   ),
-                  title: const Text('Store Administration (Demo PIN)'),
+                  title: const Text('Store Administration'),
                   subtitle: const Text(
-                    'Tap 3 times or click to enter demo admin panel (PIN: 1234)',
+                    'Tap 3 times or click to access the admin panel',
                   ),
                   onTap: _onAdminSecretTap,
                 ),

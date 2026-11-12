@@ -381,7 +381,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   const SizedBox(height: 6),
                   const Text(
-                    'Demo coupons: FAVORITE10 (10% off), SAVE20 (20% off >\$50)',
+                    'Available codes: FAVORITE10 (10% off), SAVE20 (20% off on orders ₦5,000+)',
                     style: TextStyle(fontSize: 11, color: Colors.grey),
                   ),
                 ],

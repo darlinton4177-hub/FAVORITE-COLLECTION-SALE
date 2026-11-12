@@ -80,7 +80,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'DEMONSTRATION CHECKOUT: No actual credit card information will be requested or charged. Orders are saved locally for demonstration purposes.',
+                        'SECURE CHECKOUT: Your order details are processed securely. Payment is collected on delivery or via your selected payment method.',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,

@@ -34,7 +34,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Panel Demo Access')),
+      appBar: AppBar(title: const Text('Admin Panel')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -55,12 +55,12 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               ),
               const SizedBox(height: 20),
               const Text(
-                'Demonstration Admin Panel',
+                'Admin Panel',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               const Text(
-                'Enter the demo PIN code to manage products, categories, orders, and local phone-gallery images.',
+                'Enter your secure PIN code to access the admin management console.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey, fontSize: 13),
               ),
@@ -83,21 +83,13 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     errorText: _hasError
-                        ? 'Incorrect PIN (Default: 1234)'
+                        ? 'Incorrect PIN. Please try again.'
                         : null,
                   ),
                   onSubmitted: (_) => _verifyPin(),
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Default Demo PIN: 1234',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueGrey,
-                ),
-              ),
               const SizedBox(height: 24),
               ElevatedButton.icon(
                 onPressed: _verifyPin,

@@ -53,6 +53,7 @@ class CartProvider extends ChangeNotifier {
 
   bool applyCoupon(String code) {
     final cleanCode = code.trim().toUpperCase();
+    // TODO: Fetch live coupons from Supabase in future. For now uses bundled coupon data.
     final coupons = DemoStoreData.getDemoCoupons();
     try {
       final found = coupons.firstWhere((c) => c.code == cleanCode);
