@@ -38,12 +38,26 @@ class Category {
   };
 
   factory Category.fromJson(Map<String, dynamic> json) {
-    final iconCode = (json['icon_code'] ?? json['iconCode']) as int?;
+    final rawId = json['id'];
+    final id = rawId != null ? rawId.toString() : '';
+
+    final name = (json['name'] ?? '').toString();
+    final description = (json['description'] ?? '').toString();
+    final imagePath = (json['image_path'] ?? json['imagePath'] ?? '').toString();
+
+    final rawIconCode = json['icon_code'] ?? json['iconCode'];
+    int? iconCode;
+    if (rawIconCode is num) {
+      iconCode = rawIconCode.toInt();
+    } else if (rawIconCode is String) {
+      iconCode = int.tryParse(rawIconCode);
+    }
+
     return Category(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      description: (json['description'] ?? '') as String,
-      imagePath: (json['image_path'] ?? json['imagePath'] ?? '') as String,
+      id: id,
+      name: name,
+      description: description,
+      imagePath: imagePath,
       iconData: _knownIcons[iconCode] ?? Icons.category_rounded,
     );
   }

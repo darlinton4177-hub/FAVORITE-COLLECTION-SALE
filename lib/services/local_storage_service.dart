@@ -8,6 +8,7 @@ import '../models/category.dart';
 import '../models/banner_item.dart';
 import '../models/order.dart';
 import '../models/user_profile.dart';
+// DemoStoreData is only used in debug mode — never imported for production fallback
 import '../data/demo_store_data.dart';
 
 class LocalStorageService {
@@ -19,6 +20,17 @@ class LocalStorageService {
   static const String keyUserProfile = 'fcs_user_profile';
   static const String keyThemeMode = 'fcs_theme_mode';
   static const String keyHasSeenOnboarding = 'fcs_has_seen_onboarding';
+  /// Set to true the first time a successful live fetch overwrites the cache.
+  static const String keyLiveFetchCompleted = 'fcs_live_fetch_completed';
+
+  /// Call this after a successful live fetch to clear any old demo seed.
+  static Future<void> markLiveFetchCompleted() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(keyLiveFetchCompleted) != true) {
+      await prefs.setBool(keyLiveFetchCompleted, true);
+      debugPrint('[LocalStorage] First live fetch completed — demo seed cleared.');
+    }
+  }
 
   static Future<String> saveImagePermanently(String sourcePath) async {
     try {
@@ -51,12 +63,17 @@ class LocalStorageService {
             .map((e) => Product.fromJson(e as Map<String, dynamic>))
             .toList();
       } catch (e) {
-        debugPrint('Error decoding saved products: $e');
+        debugPrint('[LocalStorage] Error decoding cached products: $e');
       }
     }
-    final initial = DemoStoreData.getInitialProducts();
-    await saveProducts(initial);
-    return initial;
+    // In debug mode, seed with demo data so the app is usable offline.
+    // In release, return empty — the UI will show an error/retry banner.
+    if (kDebugMode) {
+      final initial = DemoStoreData.getInitialProducts();
+      await saveProducts(initial);
+      return initial;
+    }
+    return [];
   }
 
   static Future<void> saveProducts(List<Product> products) async {
@@ -75,12 +92,15 @@ class LocalStorageService {
             .map((e) => Category.fromJson(e as Map<String, dynamic>))
             .toList();
       } catch (e) {
-        debugPrint('Error decoding saved categories: $e');
+        debugPrint('[LocalStorage] Error decoding cached categories: $e');
       }
     }
-    final initial = DemoStoreData.getInitialCategories();
-    await saveCategories(initial);
-    return initial;
+    if (kDebugMode) {
+      final initial = DemoStoreData.getInitialCategories();
+      await saveCategories(initial);
+      return initial;
+    }
+    return [];
   }
 
   static Future<void> saveCategories(List<Category> categories) async {
@@ -99,12 +119,15 @@ class LocalStorageService {
             .map((e) => BannerItem.fromJson(e as Map<String, dynamic>))
             .toList();
       } catch (e) {
-        debugPrint('Error decoding saved banners: $e');
+        debugPrint('[LocalStorage] Error decoding cached banners: $e');
       }
     }
-    final initial = DemoStoreData.getInitialBanners();
-    await saveBanners(initial);
-    return initial;
+    if (kDebugMode) {
+      final initial = DemoStoreData.getInitialBanners();
+      await saveBanners(initial);
+      return initial;
+    }
+    return [];
   }
 
   static Future<void> saveBanners(List<BannerItem> banners) async {

@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Debug APK & Release
+    name: Build Release APK & Web
     runs-on: ubuntu-latest
 
     steps:
@@ -49,14 +49,14 @@ jobs:
         with:
           path: build/web
 
-      - name: Build Android Debug APK
-        run: flutter build apk --debug --android-skip-build-dependency-validation
+      - name: Build Android Release APK
+        run: flutter build apk --release --android-skip-build-dependency-validation
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug.apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Create Unique Release Tag
         id: release_tag
@@ -71,22 +71,21 @@ jobs:
           tag_name: ${{ steps.release_tag.outputs.tag }}
           name: "Favorite Collection Sale Release ${{ steps.release_tag.outputs.tag }}"
           body: |
-            ## Favorite Collection Sale Android APK
+            ## Favorite Collection Sale Release Build
 
-            This official release was compiled directly from the `main` branch with live Supabase backend integration.
+            Compiled directly from `main` branch with live Supabase backend, tolerantly parsed catalog, and real data synchronization.
 
             🌐 **Live Website:** https://darlinton4177-hub.github.io/FAVORITE-COLLECTION-SALE/
 
-            ### Included in this build:
-            - Live Supabase backend integration (products, categories, banners, coupons, exchange rates).
-            - Official Favorite Collection brand logo and launcher icons.
-            - Authentic NGN (₦) currency formatting across catalogue, cart, and checkout.
-            - User authentication and live profile management via Supabase Auth.
-            - Secure store administration console.
-            - AI Shopping Assistant (English, Pidgin, Igbo, Yoruba).
+            ### Key Enhancements in this Build:
+            - **Android Internet Permission:** Added `<uses-permission android:name="android.permission.INTERNET"/>` ensuring live Supabase connectivity on all Android devices.
+            - **Live Supabase Mutations:** Order placements, product/category/banner modifications now persist directly to Supabase with proper RLS constraints.
+            - **Visible Connectivity & Diagnostics:** Real-time data source status (LIVE/CACHED/ERROR), rows fetched counters, and connection diagnostics in Profile.
+            - **Robust Parsing:** Tolerant field and record parsers that gracefully handle schema evolution.
+            - **Admin Security:** Role-based authentication backed by Supabase `profiles.role = 'admin'` replacing legacy PIN entry.
 
             **Download the attached APK below to install on your Android device.**
-          files: build/app/outputs/flutter-apk/app-debug.apk
+          files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

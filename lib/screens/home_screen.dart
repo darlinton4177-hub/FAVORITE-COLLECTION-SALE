@@ -5,6 +5,7 @@ import '../providers/cart_provider.dart';
 import '../providers/store_provider.dart';
 import '../widgets/product_card.dart';
 import '../widgets/store_image_widget.dart';
+import '../services/supabase_store_service.dart';
 import 'shop_catalog_screen.dart';
 import 'cart_screen.dart';
 import 'wishlist_screen.dart';
@@ -195,6 +196,40 @@ class HomeStorefrontTab extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (store.dataSource == DataSource.error)
+                Container(
+                  width: double.infinity,
+                  color: Colors.red.shade700,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.wifi_off_rounded, color: Colors.white, size: 20),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          store.lastError != null && store.lastError!.isNotEmpty
+                              ? 'Sync issue: ' + store.lastError!
+                              : 'Unable to connect to live store backend.',
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.red.shade900,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        onPressed: () => store.retry(),
+                        child: const Text('Retry', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                      ),
+                    ],
+                  ),
+                ),
               if (store.banners.isNotEmpty) ...[
                 SizedBox(
                   height: 180,

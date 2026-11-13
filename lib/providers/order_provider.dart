@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/order.dart';
 import '../services/local_storage_service.dart';
+import '../services/supabase_store_service.dart';
 
 class OrderProvider extends ChangeNotifier {
   List<Order> _orders = [];
@@ -23,16 +24,27 @@ class OrderProvider extends ChangeNotifier {
 
   Future<void> placeOrder(Order order) async {
     _orders.insert(0, order);
-    await LocalStorageService.saveOrders(_orders);
     notifyListeners();
+    // 1. Write to Supabase orders table
+    final err = await SupabaseStoreService.insertOrder(order);
+    if (err != null) {
+      debugPrint('[OrderProvider] Failed to persist order to Supabase: $err');
+    }
+    // 2. Persist to local storage as cache
+    await LocalStorageService.saveOrders(_orders);
   }
 
   Future<void> updateOrderStatus(String orderId, OrderStatus status) async {
     final index = _orders.indexWhere((o) => o.id == orderId);
     if (index != -1) {
       _orders[index] = _orders[index].copyWith(status: status);
-      await LocalStorageService.saveOrders(_orders);
       notifyListeners();
+      try {
+        await SupabaseStoreService.updateOrderStatus(orderId, status.name);
+      } catch (e) {
+        debugPrint('[OrderProvider] Supabase updateOrderStatus error: $e');
+      }
+      await LocalStorageService.saveOrders(_orders);
     }
   }
 

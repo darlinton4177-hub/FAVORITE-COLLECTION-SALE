@@ -1,3 +1,6 @@
+import '../config/supabase_config.dart';
+import '../providers/store_provider.dart';
+import '../services/supabase_store_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../config/store_config.dart';
@@ -363,7 +366,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
 
-            const SizedBox(height: 30),
+            
+            // DIAGNOSTICS & SYSTEM STATUS
+            Consumer<StoreProvider>(
+              builder: (context, store, _) {
+                final sourceColor = store.dataSource == DataSource.live
+                    ? Colors.green
+                    : (store.dataSource == DataSource.cached ? Colors.orange : Colors.red);
+                final sourceLabel = store.dataSource == DataSource.live
+                    ? 'LIVE (Supabase)'
+                    : (store.dataSource == DataSource.cached ? 'CACHED (Offline)' : 'ERROR / OFFLINE');
+
+                return Container(
+                  margin: const EdgeInsets.only(top: 8, bottom: 16),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF242426) : const Color(0xFFF0F2F5),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isDark ? Colors.white10 : Colors.black12,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.info_outline_rounded, size: 16, color: sourceColor),
+                          const SizedBox(width: 6),
+                          const Text(
+                            'About & Diagnostics',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: sourceColor.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              sourceLabel,
+                              style: TextStyle(
+                                color: sourceColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(height: 16),
+                      _buildDiagRow('App Version', 'v1.0.0+1 (Release)'),
+                      _buildDiagRow('Backend Host', Uri.parse(SupabaseConfig.url).host),
+                      _buildDiagRow(
+                        'Rows Synced',
+                        'Categories: ${store.categoriesFetched} | Products: ${store.productsFetched} | Banners: ${store.bannersFetched}',
+                      ),
+                      if (store.lastError != null && store.lastError!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            'Last Error: ${store.lastError}',
+                            style: const TextStyle(fontSize: 10, color: Colors.redAccent),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 16),
             Text(
               '${StoreConfig.appName} v1.0.0 (Template v1.1)',
               style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -376,6 +450,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 40),
           ],
         ),
+      ),
+    );
+  }
+
+  
+  Widget _buildDiagRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ],
       ),
     );
   }

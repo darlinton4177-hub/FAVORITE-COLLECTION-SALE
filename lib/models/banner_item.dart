@@ -44,13 +44,22 @@ class BannerItem {
   };
 
   factory BannerItem.fromJson(Map<String, dynamic> json) {
+    final rawId = json['id'];
+    final id = rawId != null ? rawId.toString() : '';
+
+    final title = (json['title'] ?? '').toString();
+    final subtitle = (json['subtitle'] ?? '').toString();
+    final imagePath = (json['image_path'] ?? json['imagePath'] ?? '').toString();
+    final targetCategoryId = (json['target_category_id'] ?? json['targetCategoryId'] ?? '').toString();
+    final badge = (json['badge'] ?? 'OFFER').toString();
+
     return BannerItem(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      subtitle: (json['subtitle'] ?? '') as String,
-      imagePath: (json['image_path'] ?? json['imagePath'] ?? '') as String,
-      targetCategoryId: (json['target_category_id'] ?? json['targetCategoryId'] ?? '') as String,
-      badge: (json['badge'] ?? 'OFFER') as String,
+      id: id,
+      title: title,
+      subtitle: subtitle,
+      imagePath: imagePath,
+      targetCategoryId: targetCategoryId,
+      badge: badge,
     );
   }
 }

@@ -62,41 +62,108 @@ class Product {
   };
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    // 1. Tolerant ID parsing (UUID or int or String)
+    final rawId = json['id'];
+    final id = rawId != null ? rawId.toString() : '';
+
+    // 2. Tolerant Title
+    final title = (json['title'] ?? '').toString();
+
+    // 3. Tolerant Description
+    final description = (json['description'] ?? '').toString();
+
+    // 4. Tolerant Category ID
+    final rawCatId = json['category_id'] ?? json['categoryId'];
+    final categoryId = rawCatId != null ? rawCatId.toString() : '';
+
+    // 5. Tolerant numeric prices (num, String, or null)
+    double parseDouble(dynamic val, [double defaultVal = 0.0]) {
+      if (val == null) return defaultVal;
+      if (val is num) return val.toDouble();
+      if (val is String) return double.tryParse(val) ?? defaultVal;
+      return defaultVal;
+    }
+
+    int parseInt(dynamic val, [int defaultVal = 0]) {
+      if (val == null) return defaultVal;
+      if (val is num) return val.toInt();
+      if (val is String) return int.tryParse(val) ?? defaultVal;
+      return defaultVal;
+    }
+
+    bool parseBool(dynamic val, [bool defaultVal = false]) {
+      if (val == null) return defaultVal;
+      if (val is bool) return val;
+      if (val is String) {
+        final lower = val.toLowerCase();
+        return lower == 'true' || lower == '1';
+      }
+      if (val is num) return val != 0;
+      return defaultVal;
+    }
+
+    final price = parseDouble(json['price'], 0.0);
+    final rawOrig = json['original_price'] ?? json['originalPrice'];
+    final originalPrice = rawOrig != null ? parseDouble(rawOrig, price) : price;
+    final rating = parseDouble(json['rating'], 4.8);
+    final reviewCount = parseInt(json['review_count'] ?? json['reviewCount'], 50);
+    final stock = parseInt(json['stock'], 10);
+
+    // 6. Tolerant images parsing (jsonb array, string, or null)
+    List<String> images = [];
+    final rawImages = json['images'];
+    if (rawImages is List) {
+      images = rawImages.map((e) => e.toString()).toList();
+    } else if (rawImages is String && rawImages.isNotEmpty) {
+      images = [rawImages];
+    }
+
+    // 7. Tolerant sizes & colors
+    List<String> sizes = [];
+    final rawSizes = json['available_sizes'] ?? json['availableSizes'];
+    if (rawSizes is List) {
+      sizes = rawSizes.map((e) => e.toString()).toList();
+    }
+
+    List<String> colors = [];
+    final rawColors = json['available_colors'] ?? json['availableColors'];
+    if (rawColors is List) {
+      colors = rawColors.map((e) => e.toString()).toList();
+    }
+
+    // 8. Booleans & badge
+    final isFeatured = parseBool(json['is_featured'] ?? json['isFeatured'], false);
+    final isFlashDeal = parseBool(json['is_flash_deal'] ?? json['isFlashDeal'], false);
+    final badge = (json['badge'] ?? '').toString();
+
+    // 9. Specifications (jsonb map or null)
+    Map<String, String> specs = {};
+    final rawSpecs = json['specifications'];
+    if (rawSpecs is Map) {
+      rawSpecs.forEach((k, v) {
+        if (k != null && v != null) {
+          specs[k.toString()] = v.toString();
+        }
+      });
+    }
+
     return Product(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: (json['description'] ?? '') as String,
-      categoryId: (json['category_id'] ?? json['categoryId'] ?? '') as String,
-      price: (json['price'] as num).toDouble(),
-      originalPrice:
-          ((json['original_price'] ?? json['originalPrice']) as num?)?.toDouble() ??
-          (json['price'] as num).toDouble(),
-      rating: (json['rating'] as num?)?.toDouble() ?? 4.8,
-      reviewCount: (json['review_count'] ?? json['reviewCount'] ?? 50) as int,
-      stock: (json['stock'] as int?) ?? 10,
-      images:
-          (json['images'] as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList() ??
-          [],
-      availableSizes:
-          ((json['available_sizes'] ?? json['availableSizes']) as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList() ??
-          [],
-      availableColors:
-          ((json['available_colors'] ?? json['availableColors']) as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList() ??
-          [],
-      isFeatured: (json['is_featured'] ?? json['isFeatured'] ?? false) as bool,
-      isFlashDeal: (json['is_flash_deal'] ?? json['isFlashDeal'] ?? false) as bool,
-      badge: (json['badge'] ?? '') as String,
-      specifications:
-          (json['specifications'] as Map<String, dynamic>?)?.map(
-            (k, v) => MapEntry(k, v.toString()),
-          ) ??
-          {},
+      id: id,
+      title: title,
+      description: description,
+      categoryId: categoryId,
+      price: price,
+      originalPrice: originalPrice,
+      rating: rating,
+      reviewCount: reviewCount,
+      stock: stock,
+      images: images,
+      availableSizes: sizes,
+      availableColors: colors,
+      isFeatured: isFeatured,
+      isFlashDeal: isFlashDeal,
+      badge: badge,
+      specifications: specs,
     );
   }
 
