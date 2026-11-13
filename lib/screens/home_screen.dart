@@ -208,7 +208,7 @@ class HomeStorefrontTab extends StatelessWidget {
                       Expanded(
                         child: Text(
                           store.lastError != null && store.lastError!.isNotEmpty
-                              ? 'Sync issue: ' + store.lastError!
+                              ? 'Sync issue: ${store.lastError}'
                               : 'Unable to connect to live store backend.',
                           style: const TextStyle(color: Colors.white, fontSize: 12),
                           maxLines: 2,

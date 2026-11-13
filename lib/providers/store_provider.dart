@@ -321,6 +321,10 @@ class StoreProvider extends ChangeNotifier {
     await LocalStorageService.saveBanners(_banners);
   }
 
+  Future<String?> pickImageFromGallery({String bucket = 'product-images'}) async {
+    return pickAndUploadImage(bucket: bucket);
+  }
+
   Future<String?> pickAndUploadImage({String bucket = 'product-images'}) async {
     try {
       final XFile? file = await _picker.pickImage(
