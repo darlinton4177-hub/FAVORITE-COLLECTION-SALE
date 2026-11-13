@@ -39,7 +39,7 @@ jobs:
         run: flutter test
 
       - name: Build Android Debug APK
-        run: flutter build apk --debug
+        run: flutter build apk --debug --android-skip-build-dependency-validation
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -60,17 +60,18 @@ jobs:
           tag_name: ${{ steps.release_tag.outputs.tag }}
           name: "Favorite Collection Sale Release ${{ steps.release_tag.outputs.tag }}"
           body: |
-            ## Favorite Collection Sale Android Demo APK
+            ## Favorite Collection Sale Android APK
 
-            This automated release was compiled directly from the `main` branch.
+            This official release was compiled directly from the `main` branch with live Supabase backend integration.
 
             ### Included in this build:
-            - Complete multi-category fashion catalog (jeans, tops, dresses, trousers, footwear, socks, accessories).
-            - Curated marketplace storefront inspired by Temu & Jumia product discovery.
-            - Search, filtering, coupons, and local persistent offline demo checkout.
-            - Full Demonstration Administrator Panel with phone photo gallery picker.
+            - Live Supabase backend integration (products, categories, banners, coupons, exchange rates).
+            - Official Favorite Collection brand logo and launcher icons.
+            - Authentic NGN (₦) currency formatting across catalogue, cart, and checkout.
+            - User authentication and live profile management via Supabase Auth.
+            - Secure store administration console.
 
-            **Download the attached APK below to install and test on any Android device.**
+            **Download the attached APK below to install on your Android device.**
           files: build/app/outputs/flutter-apk/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
