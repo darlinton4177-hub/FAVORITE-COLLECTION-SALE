@@ -29,30 +29,45 @@ android {
 
     signingConfigs {
         create("release") {
-            val keystorePath = System.getenv("KEYSTORE_PATH") ?: project.findProperty("KEYSTORE_PATH") as String?
-            val keyAliasVar = System.getenv("KEY_ALIAS") ?: project.findProperty("KEY_ALIAS") as String?
-            val keyPasswordVar = System.getenv("KEY_PASSWORD") ?: project.findProperty("KEY_PASSWORD") as String?
-            val storePasswordVar = System.getenv("STORE_PASSWORD") ?: project.findProperty("STORE_PASSWORD") as String?
+            val keyPath = System.getenv("KEYSTORE_PATH") ?: "keystore.jks"
+            val keyAliasVar = System.getenv("KEY_ALIAS") ?: "favorite_collection"
+            val keyPasswordVar = System.getenv("KEY_PASSWORD") ?: "FavoriteCollection2026!"
+            val storePasswordVar = System.getenv("STORE_PASSWORD") ?: "FavoriteCollection2026!"
 
-            if (keystorePath != null && file(keystorePath).exists()) {
-                storeFile = file(keystorePath)
-                storePassword = storePasswordVar ?: ""
-                keyAlias = keyAliasVar ?: ""
-                keyPassword = keyPasswordVar ?: ""
+            val keyFile = file(keyPath)
+            if (keyFile.exists()) {
+                storeFile = keyFile
+                storePassword = storePasswordVar
+                keyAlias = keyAliasVar
+                keyPassword = keyPasswordVar
             } else {
-                // Fallback to debug keystore for local dev if release key is not passed
-                val debugKeystore = signingConfigs.getByName("debug")
-                storeFile = debugKeystore.storeFile
-                storePassword = debugKeystore.storePassword
-                keyAlias = debugKeystore.keyAlias
-                keyPassword = debugKeystore.keyPassword
+                val altFile = file("../app/$keyPath")
+                if (altFile.exists()) {
+                    storeFile = altFile
+                    storePassword = storePasswordVar
+                    keyAlias = keyAliasVar
+                    keyPassword = keyPasswordVar
+                } else {
+                    val debugKey = signingConfigs.getByName("debug")
+                    if (debugKey.storeFile != null && debugKey.storeFile!!.exists()) {
+                        storeFile = debugKey.storeFile
+                        storePassword = debugKey.storePassword
+                        keyAlias = debugKey.keyAlias
+                        keyPassword = debugKey.keyPassword
+                    }
+                }
             }
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            val releaseConfig = signingConfigs.getByName("release")
+            if (releaseConfig.storeFile != null && releaseConfig.storeFile!!.exists()) {
+                signingConfig = releaseConfig
+            } else {
+                signingConfig = signingConfigs.getByName("debug")
+            }
         }
     }
 }
