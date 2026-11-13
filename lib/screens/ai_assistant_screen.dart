@@ -534,7 +534,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen>
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 itemCount: msg.recommendedProducts.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                separatorBuilder: (context, index) => const SizedBox(width: 10),
                 itemBuilder: (ctx, pIdx) {
                   final prod = msg.recommendedProducts[pIdx];
                   return _buildProductSnippet(prod, isDark);
