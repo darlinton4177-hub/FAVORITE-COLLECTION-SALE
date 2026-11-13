@@ -72,6 +72,14 @@ class DemoStoreData {
         imagePath: AssetCatalog.catAccessories,
         iconData: Icons.watch_rounded,
       ),
+      const Category(
+        id: 'perfumes',
+        name: 'Perfumes & Fragrances',
+        description:
+            'Long-lasting luxury ouds, signature perfumes, and fresh scented mists.',
+        imagePath: AssetCatalog.catAccessories,
+        iconData: Icons.spa_rounded,
+      ),
     ];
   }
 
@@ -318,6 +326,29 @@ class DemoStoreData {
           'Material': '100% Top-Grain Cowhide Leather',
           'Width': '35mm (1.38 inches)',
           'Hardware': 'Antiallergic Brushed Nickel Alloy',
+        },
+      ),
+      Product(
+        id: 'prod_009',
+        title: 'Royal Amber & Oud Luxury Eau De Parfum',
+        description:
+            'A captivating oriental fragrance featuring rich smoky oud, warm amber, damask rose, and velvety vanilla. Long-lasting sillage formulated for unforgettable presence.',
+        categoryId: 'perfumes',
+        price: 45.00,
+        originalPrice: 70.00,
+        rating: 4.9,
+        reviewCount: 142,
+        stock: 25,
+        images: [AssetCatalog.catAccessories],
+        availableSizes: ['50ml', '100ml'],
+        availableColors: ['Royal Amber Edition'],
+        isFeatured: true,
+        isFlashDeal: true,
+        badge: 'BESTSELLER',
+        specifications: {
+          'Fragrance Family': 'Oriental Woody',
+          'Longevity': 'Up to 24 Hours',
+          'Origin': 'Ikom Hub Fast Dispatch',
         },
       ),
     ];

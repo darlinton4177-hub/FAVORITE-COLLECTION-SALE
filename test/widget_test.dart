@@ -6,6 +6,7 @@ import 'package:favorite_collection_sale/models/product.dart';
 import 'package:favorite_collection_sale/providers/cart_provider.dart';
 import 'package:favorite_collection_sale/providers/store_provider.dart';
 import 'package:favorite_collection_sale/widgets/product_card.dart';
+import 'package:favorite_collection_sale/services/ai_assistant_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -104,6 +105,52 @@ void main() {
       cart.removeItem(key);
       expect(cart.itemCount, 0);
       expect(cart.totalAmount, 0.0);
+    });
+  });
+
+
+  group('AI Shopping Assistant Tests', () {
+    test('AIAssistantService returns shipping details from Ikom hub', () async {
+      final products = DemoStoreData.getInitialProducts();
+      final categories = DemoStoreData.getInitialCategories();
+
+      final reply = await AIAssistantService.sendMessage(
+        query: 'How does shipping from Ikom work?',
+        availableProducts: products,
+        availableCategories: categories,
+      );
+
+      expect(reply.text, contains('Ikom hub'));
+      expect(reply.text, contains('50,000'));
+      expect(reply.isUser, false);
+    });
+
+    test('AIAssistantService responds accurately in Nigerian Pidgin', () async {
+      final products = DemoStoreData.getInitialProducts();
+      final categories = DemoStoreData.getInitialCategories();
+
+      final reply = await AIAssistantService.sendMessage(
+        query: 'How far, wetin you dey sell?',
+        availableProducts: products,
+        availableCategories: categories,
+        languageOverride: 'pcm',
+      );
+
+      expect(reply.text, contains('Favorite Collection'));
+      expect(reply.isUser, false);
+    });
+
+    test('AIAssistantService handles 30-day return policy inquiry', () async {
+      final products = DemoStoreData.getInitialProducts();
+      final categories = DemoStoreData.getInitialCategories();
+
+      final reply = await AIAssistantService.sendMessage(
+        query: 'What is your return policy?',
+        availableProducts: products,
+        availableCategories: categories,
+      );
+
+      expect(reply.text, contains('30-day'));
     });
   });
 

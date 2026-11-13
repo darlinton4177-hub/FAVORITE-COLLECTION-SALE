@@ -9,6 +9,7 @@ import 'shop_catalog_screen.dart';
 import 'cart_screen.dart';
 import 'wishlist_screen.dart';
 import 'profile_screen.dart';
+import 'ai_assistant_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -164,6 +165,27 @@ class HomeStorefrontTab extends StatelessWidget {
               );
             },
           ),
+          IconButton(
+            tooltip: 'AI Shopping Assistant',
+            icon: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: StoreConfig.primaryColor.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.auto_awesome_rounded,
+                color: StoreConfig.primaryColor,
+                size: 20,
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const AIAssistantScreen()),
+              );
+            },
+          ),
+          const SizedBox(width: 4),
         ],
       ),
       body: RefreshIndicator(
@@ -267,6 +289,80 @@ class HomeStorefrontTab extends StatelessWidget {
                   ),
                 ),
               ],
+              // AI Assistant Quick Access Banner
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      StoreConfig.primaryColor.withValues(alpha: 0.1),
+                      StoreConfig.secondaryColor.withValues(alpha: 0.08),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: StoreConfig.primaryColor.withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: StoreConfig.primaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.auto_awesome_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Favorite AI Shopping Assistant',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                          Text(
+                            'Chat in English, Pidgin, Igbo or Yoruba about clothes, perfumes & Ikom delivery.',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: isDark ? Colors.white70 : Colors.black87,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: StoreConfig.primaryColor,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const AIAssistantScreen()),
+                        );
+                      },
+                      child: const Text('Chat', style: TextStyle(fontSize: 11)),
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -296,7 +392,7 @@ class HomeStorefrontTab extends StatelessWidget {
                           ),
                           SizedBox(width: 4),
                           Text(
-                            'Free Delivery >\$50',
+                            'Ikom Fast Delivery',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

@@ -9,15 +9,20 @@ class StoreConfig {
 
   static const String storeEmail = 'darlinton4177@gmail.com';
   static const String storePhone = '+234 (800) 555-STYLE';
-  static const String storeAddress = 'Nigeria & Cameroon';
+  static const String storeAddress = 'Ikom Hub, Cross River State, Nigeria & Cameroon';
+  static const String shippingHub = 'Ikom Hub, Cross River State';
   
   // Master Currency Settings (Nigeria NGN)
   static const String currencySymbol = '₦';
   static const String currencyCode = 'NGN';
-  static const double freeShippingThreshold = 50000.0; // ₦50,000
+  static const double freeShippingThreshold = 50000.0; // ₦50,000 (~$35 USD)
   static const double standardShippingFee = 2500.0;     // ₦2,500
   static const double expressShippingFee = 6500.0;      // ₦6,500
   static const double estimatedTaxRate = 0.075;         // 7.5% VAT
+
+  // AI Shopping Assistant Branding
+  static const String aiAssistantName = 'Favorite AI';
+  static const String aiAssistantTagline = 'Dedicated Shopping Assistant';
 
   // Admin PIN (change before production deployment)
   static const String demoAdminPin = '1234';
@@ -35,7 +40,7 @@ class StoreConfig {
   static const String returnPolicy =
       '30-day hassle-free returns on unworn fashion items with original tags intact.';
   static const String shippingPolicy =
-      'Standard 2-4 business days delivery across Nigeria and Cameroon. Express delivery available. Free shipping on orders over ₦50,000.';
+      'Fast dispatch directly from our Ikom hub across Nigeria and Cameroon (2-4 business days). Express delivery available. Free shipping on orders over ₦50,000 or \$35.';
   static const String privacyPolicy =
       'We respect your privacy. All customer data and payment transactions are secured with Supabase enterprise encryption.';
   static const String termsOfService =

@@ -8,6 +8,7 @@ import 'order_history_screen.dart';
 import 'wishlist_screen.dart';
 import 'admin/admin_login_screen.dart';
 import 'admin/admin_dashboard_screen.dart';
+import 'ai_assistant_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -276,6 +277,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
 
+            _buildMenuTile(
+              context,
+              icon: Icons.auto_awesome_rounded,
+              title: 'AI Shopping Assistant',
+              subtitle: 'Chat in English, Pidgin, Igbo, or Yoruba',
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const AIAssistantScreen()),
+                );
+              },
+            ),
             _buildMenuTile(
               context,
               icon: Icons.receipt_long_outlined,
