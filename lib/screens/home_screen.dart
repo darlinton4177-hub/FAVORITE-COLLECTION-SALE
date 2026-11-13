@@ -6,6 +6,7 @@ import '../providers/store_provider.dart';
 import '../widgets/product_card.dart';
 import '../widgets/store_image_widget.dart';
 import '../services/supabase_store_service.dart';
+import '../services/app_update_service.dart';
 import 'shop_catalog_screen.dart';
 import 'cart_screen.dart';
 import 'wishlist_screen.dart';
@@ -19,8 +20,30 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AppUpdateService.checkForUpdates(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      AppUpdateService.checkForUpdates(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

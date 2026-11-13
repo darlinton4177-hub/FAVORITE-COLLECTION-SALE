@@ -43,7 +43,13 @@ class Category {
 
     final name = (json['name'] ?? '').toString();
     final description = (json['description'] ?? '').toString();
-    final imagePath = (json['image_path'] ?? json['imagePath'] ?? '').toString();
+    final imagePath = (json['image_path'] ??
+            json['imagePath'] ??
+            json['image_url'] ??
+            json['imageUrl'] ??
+            json['image'] ??
+            '')
+        .toString();
 
     final rawIconCode = json['icon_code'] ?? json['iconCode'];
     int? iconCode;

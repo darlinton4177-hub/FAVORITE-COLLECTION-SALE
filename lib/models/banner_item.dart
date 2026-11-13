@@ -49,7 +49,13 @@ class BannerItem {
 
     final title = (json['title'] ?? '').toString();
     final subtitle = (json['subtitle'] ?? '').toString();
-    final imagePath = (json['image_path'] ?? json['imagePath'] ?? '').toString();
+    final imagePath = (json['image_path'] ??
+            json['imagePath'] ??
+            json['image_url'] ??
+            json['imageUrl'] ??
+            json['image'] ??
+            '')
+        .toString();
     final targetCategoryId = (json['target_category_id'] ?? json['targetCategoryId'] ?? '').toString();
     final badge = (json['badge'] ?? 'OFFER').toString();
 

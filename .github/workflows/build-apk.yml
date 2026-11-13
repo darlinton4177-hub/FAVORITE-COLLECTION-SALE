@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Release APK & Web
+    name: Build Signed Release APK & Web
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +32,17 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Decode Release Keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+            echo "Release keystore decoded successfully."
+          else
+            echo "No KEYSTORE_BASE64 secret provided. Gradle will fall back to debug signing."
+          fi
+
       - name: Get Dependencies
         run: flutter pub get
 
@@ -50,7 +61,13 @@ jobs:
           path: build/web
 
       - name: Build Android Release APK
-        run: flutter build apk --release --android-skip-build-dependency-validation
+        env:
+          KEYSTORE_PATH: keystore.jks
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'favorite_collection' }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'FavoriteCollection2026!' }}
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD || 'FavoriteCollection2026!' }}
+        run: |
+          flutter build apk --release --build-name=1.0.0 --build-number=${GITHUB_RUN_NUMBER} --android-skip-build-dependency-validation
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -71,23 +88,46 @@ jobs:
           tag_name: ${{ steps.release_tag.outputs.tag }}
           name: "Favorite Collection Sale Release ${{ steps.release_tag.outputs.tag }}"
           body: |
-            ## Favorite Collection Sale Release Build
+            ## Favorite Collection Sale Release Build (Build #${{ github.run_number }})
 
-            Compiled directly from `main` branch with live Supabase backend, tolerantly parsed catalog, and real data synchronization.
+            Compiled directly from `main` branch with live Supabase backend, permanent release signing, and real image resolution.
 
             🌐 **Live Website:** https://darlinton4177-hub.github.io/FAVORITE-COLLECTION-SALE/
 
             ### Key Enhancements in this Build:
-            - **Android Internet Permission:** Added `<uses-permission android:name="android.permission.INTERNET"/>` ensuring live Supabase connectivity on all Android devices.
-            - **Live Supabase Mutations:** Order placements, product/category/banner modifications now persist directly to Supabase with proper RLS constraints.
-            - **Visible Connectivity & Diagnostics:** Real-time data source status (LIVE/CACHED/ERROR), rows fetched counters, and connection diagnostics in Profile.
-            - **Robust Parsing:** Tolerant field and record parsers that gracefully handle schema evolution.
-            - **Admin Security:** Role-based authentication backed by Supabase `profiles.role = 'admin'` replacing legacy PIN entry.
+            - **Permanent Release Keystore:** Production-signed APK enabling seamless in-place updates.
+            - **In-App Auto-Update System:** Automatically checks Supabase `app_versions`, downloads updates with progress bar, and launches the Android installer.
+            - **Verified Image Resolution:** Reads public Supabase Storage and high-resolution Unsplash URLs with graceful fallback for all categories, banners, and curated fashion products.
+            - **Visual Diagnostics:** Profile diagnostics now monitors live image resolution status and logs any failed URL in real-time.
+            - **Live Supabase Sync:** Customer orders, admin catalog edits, and photo uploads persist to live database tables.
 
-            **Download the attached APK below to install on your Android device.**
+            **Download the attached APK below to install or update on your Android device.**
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Register Release in Supabase app_versions
+        if: github.ref == 'refs/heads/main' && env.SUPABASE_SERVICE_ROLE_KEY != ''
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_URL: "https://tgcumdlpukuhebtwbgqn.supabase.co"
+          TAG_NAME: ${{ steps.release_tag.outputs.tag }}
+          RUN_NUM: ${{ github.run_number }}
+        run: |
+          APK_URL="https://github.com/${{ github.repository }}/releases/download/${TAG_NAME}/app-release.apk"
+          curl -s -X POST "${SUPABASE_URL}/rest/v1/app_versions" \
+            -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "Content-Type: application/json" \
+            -H "Prefer: return=minimal" \
+            -d "{
+              \"version_code\": ${RUN_NUM},
+              \"version_name\": \"1.0.0+${RUN_NUM}\",
+              \"apk_url\": \"${APK_URL}\",
+              \"release_notes\": \"Favorite Collection Sale Build #${RUN_NUM}. Includes real image resolution, in-app updates, and live backend synchronization.\",
+              \"force_update\": false,
+              \"is_active\": true
+            }" || echo "Supabase version registration skipped or completed"
 
   deploy-pages:
     name: Deploy to GitHub Pages

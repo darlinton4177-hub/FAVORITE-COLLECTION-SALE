@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../config/store_config.dart';
+import '../providers/store_provider.dart';
 
 class StoreImageWidget extends StatelessWidget {
   final String imagePath;
@@ -10,6 +12,9 @@ class StoreImageWidget extends StatelessWidget {
   final BorderRadius? borderRadius;
   final IconData fallbackIcon;
   final String fallbackLabel;
+
+  static const String publicStorageBase =
+      'https://tgcumdlpukuhebtwbgqn.supabase.co/storage/v1/object/public/banners/';
 
   const StoreImageWidget({
     super.key,
@@ -22,15 +27,68 @@ class StoreImageWidget extends StatelessWidget {
     this.fallbackLabel = '',
   });
 
+  /// Resolves raw paths into proper network URLs, asset paths, or file paths.
+  static String resolveImagePath(String raw) {
+    var path = raw.trim();
+    if (path.isEmpty) return '';
+
+    // 1. Full HTTPS / HTTP URL
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+
+    // 2. Local asset references (support both 'assets/...' and '/assets/...')
+    if (path.startsWith('/assets/')) {
+      path = path.substring(1);
+    }
+    if (path.startsWith('assets/')) {
+      // Graceful mapping for legacy non-existent paths:
+      // 'assets/images/cat_clothing.png' -> 'assets/images/categories/clothing.png'
+      if (path.contains('cat_')) {
+        return path.replaceAll('cat_', 'categories/');
+      }
+      // 'assets/images/banner_hero_sale.png' -> 'assets/images/banners/hero_sale.png'
+      if (path.contains('banner_')) {
+        final bName = path.split('banner_').last;
+        if (bName.contains('hero')) return 'assets/images/banners/hero_sale.png';
+        if (bName.contains('trending')) return 'assets/images/banners/trending_fashion.png';
+        if (bName.contains('clearance')) return 'assets/images/banners/clearance_deals.png';
+        return 'assets/images/banners/$bName';
+      }
+      return path;
+    }
+
+    // 3. Absolute local file on device (e.g. from photo picker)
+    if (path.contains('imported_images') ||
+        path.contains('data/user') ||
+        path.contains('cache/')) {
+      return path;
+    }
+
+    // 4. Relative Supabase storage path (e.g. "categories/clothing.png", "trending_fashion.png")
+    if (path.startsWith('/')) {
+      path = path.substring(1);
+    }
+    return '$publicStorageBase$path';
+  }
+
+  void _recordError(BuildContext context, String url, Object error) {
+    try {
+      final store = Provider.of<StoreProvider>(context, listen: false);
+      store.recordImageError(url, error);
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
+    final resolved = resolveImagePath(imagePath);
     Widget content;
 
-    if (imagePath.isEmpty) {
+    if (resolved.isEmpty) {
       content = _buildPlaceholder(context);
-    } else if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    } else if (resolved.startsWith('http://') || resolved.startsWith('https://')) {
       content = Image.network(
-        imagePath,
+        resolved,
         width: width,
         height: height,
         fit: fit,
@@ -49,33 +107,39 @@ class StoreImageWidget extends StatelessWidget {
             ),
           );
         },
-        errorBuilder: (context, error, stackTrace) => _buildPlaceholder(context),
+        errorBuilder: (context, error, stackTrace) {
+          _recordError(context, resolved, error);
+          return _buildPlaceholder(context);
+        },
       );
-    } else if (imagePath.startsWith('/') ||
-        imagePath.contains('imported_images') ||
-        imagePath.contains('data/user')) {
-      final file = File(imagePath);
+    } else if (resolved.startsWith('assets/')) {
+      content = Image.asset(
+        resolved,
+        width: width,
+        height: height,
+        fit: fit,
+        errorBuilder: (context, error, stackTrace) {
+          _recordError(context, resolved, error);
+          return _buildPlaceholder(context);
+        },
+      );
+    } else {
+      final file = File(resolved);
       if (file.existsSync()) {
         content = Image.file(
           file,
           width: width,
           height: height,
           fit: fit,
-          errorBuilder: (context, error, stackTrace) =>
-              _buildPlaceholder(context),
+          errorBuilder: (context, error, stackTrace) {
+            _recordError(context, resolved, error);
+            return _buildPlaceholder(context);
+          },
         );
       } else {
+        _recordError(context, resolved, 'Local image file not found on device');
         content = _buildPlaceholder(context);
       }
-    } else {
-      content = Image.asset(
-        imagePath,
-        width: width,
-        height: height,
-        fit: fit,
-        errorBuilder: (context, error, stackTrace) =>
-            _buildPlaceholder(context),
-      );
     }
 
     if (borderRadius != null) {

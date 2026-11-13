@@ -19,6 +19,9 @@ class StoreProvider extends ChangeNotifier {
   int _productsFetched = 0;
   int _bannersFetched = 0;
 
+  String? _firstFailingImageUrl;
+  String? _firstFailingImageError;
+
   String _searchQuery = '';
   String? _selectedCategoryId;
   String _selectedSort = 'featured';
@@ -36,6 +39,17 @@ class StoreProvider extends ChangeNotifier {
   int get categoriesFetched => _categoriesFetched;
   int get productsFetched => _productsFetched;
   int get bannersFetched => _bannersFetched;
+  String? get firstFailingImageUrl => _firstFailingImageUrl;
+  String? get firstFailingImageError => _firstFailingImageError;
+
+  void recordImageError(String url, Object error) {
+    if (_firstFailingImageUrl == null) {
+      _firstFailingImageUrl = url;
+      _firstFailingImageError = error.toString();
+      debugPrint('[StoreProvider] First failing image: $url ($error)');
+      notifyListeners();
+    }
+  }
 
   String get searchQuery => _searchQuery;
   String? get selectedCategoryId => _selectedCategoryId;
@@ -48,6 +62,8 @@ class StoreProvider extends ChangeNotifier {
   Future<void> init() async {
     _isLoading = true;
     _lastError = null;
+    _firstFailingImageUrl = null;
+    _firstFailingImageError = null;
     notifyListeners();
 
     _wishlistIds = await LocalStorageService.loadWishlist();

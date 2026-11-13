@@ -423,6 +423,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         'Rows Synced',
                         'Categories: ${store.categoriesFetched} | Products: ${store.productsFetched} | Banners: ${store.bannersFetched}',
                       ),
+                      if (store.firstFailingImageUrl != null) ...[
+                        const SizedBox(height: 6),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Image Resolution Failure:',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                store.firstFailingImageUrl!,
+                                style: const TextStyle(fontSize: 10, color: Colors.redAccent),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (store.firstFailingImageError != null)
+                                Text(
+                                  store.firstFailingImageError!,
+                                  style: const TextStyle(fontSize: 9, color: Colors.red),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ] else ...[
+                        _buildDiagRow('Image Status', 'All images resolving OK'),
+                      ],
                       if (store.lastError != null && store.lastError!.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(top: 4),

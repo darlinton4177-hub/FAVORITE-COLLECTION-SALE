@@ -111,11 +111,18 @@ class Product {
 
     // 6. Tolerant images parsing (jsonb array, string, or null)
     List<String> images = [];
-    final rawImages = json['images'];
+    final rawImages = json['images'] ??
+        json['image_urls'] ??
+        json['image_url'] ??
+        json['image_path'] ??
+        json['image'];
     if (rawImages is List) {
-      images = rawImages.map((e) => e.toString()).toList();
-    } else if (rawImages is String && rawImages.isNotEmpty) {
-      images = [rawImages];
+      images = rawImages
+          .where((e) => e != null && e.toString().trim().isNotEmpty)
+          .map((e) => e.toString().trim())
+          .toList();
+    } else if (rawImages is String && rawImages.trim().isNotEmpty) {
+      images = [rawImages.trim()];
     }
 
     // 7. Tolerant sizes & colors
