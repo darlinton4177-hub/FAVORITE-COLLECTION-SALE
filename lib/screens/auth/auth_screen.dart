@@ -3,10 +3,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../config/store_config.dart';
 import '../../config/supabase_config.dart';
 import '../../services/auth_service.dart';
+import '../home_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   final bool initialIsSignUp;
-  const AuthScreen({super.key, this.initialIsSignUp = false});
+  final bool isMandatoryGate;
+  const AuthScreen({super.key, this.initialIsSignUp = false, this.isMandatoryGate = false});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -35,6 +37,16 @@ class _AuthScreenState extends State<AuthScreen>
   // OTP State
   bool _isCodeSent = false;
   int _remainingDailyAttempts = 3;
+
+  void _onSuccess() {
+    if (widget.isMandatoryGate) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } else {
+      _onSuccess();
+    }
+  }
 
   @override
   void initState() {
@@ -96,7 +108,7 @@ class _AuthScreenState extends State<AuthScreen>
         _isCodeSent = true;
         _remainingDailyAttempts = result.remainingAttempts;
         _successMessage =
-            'Verification code sent to $identifier. Enter the 6-digit code below:';
+            '6-digit verification code sent from Favorite Collection to $identifier. Enter the code below:';
       });
     } on AuthException catch (e) {
       setState(() => _errorMessage = e.message);
@@ -134,7 +146,7 @@ class _AuthScreenState extends State<AuthScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Verified and signed in successfully!')),
         );
-        Navigator.of(context).pop(true);
+        _onSuccess();
       } else {
         setState(() => _errorMessage = 'Invalid or expired code. Please try again.');
       }
@@ -168,7 +180,7 @@ class _AuthScreenState extends State<AuthScreen>
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Signed in successfully!')),
           );
-          Navigator.of(context).pop(true);
+          _onSuccess();
         }
       } else {
         // Sign Up
@@ -184,7 +196,7 @@ class _AuthScreenState extends State<AuthScreen>
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Account created and signed in!')),
             );
-            Navigator.of(context).pop(true);
+            _onSuccess();
           } else {
             setState(() {
               _successMessage =
@@ -210,6 +222,7 @@ class _AuthScreenState extends State<AuthScreen>
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: !widget.isMandatoryGate,
         title: Text(
           StoreConfig.appName,
           style: const TextStyle(fontWeight: FontWeight.bold),

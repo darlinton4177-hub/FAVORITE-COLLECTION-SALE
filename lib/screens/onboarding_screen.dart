@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../config/store_config.dart';
 import '../providers/settings_provider.dart';
-import 'home_screen.dart';
+import 'auth/auth_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -164,6 +164,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Provider.of<SettingsProvider>(context, listen: false).completeOnboarding();
     Navigator.of(
       context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const HomeScreen()));
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const AuthScreen(isMandatoryGate: true)));
   }
 }

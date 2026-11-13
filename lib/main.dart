@@ -7,7 +7,7 @@ import 'providers/store_provider.dart';
 import 'providers/cart_provider.dart';
 import 'providers/order_provider.dart';
 import 'providers/settings_provider.dart';
-import 'screens/onboarding_screen.dart';
+import 'screens/splash_screen.dart';
 import 'screens/home_screen.dart';
 
 void main() async {
@@ -75,13 +75,7 @@ class FavoriteCollectionSaleApp extends StatelessWidget {
                 centerTitle: false,
               ),
             ),
-            home: settings.isInitialized
-                ? (settings.hasSeenOnboarding
-                      ? const HomeScreen()
-                      : const OnboardingScreen())
-                : const Scaffold(
-                    body: Center(child: CircularProgressIndicator()),
-                  ),
+            home: const SplashScreen(),
           );
         },
       ),

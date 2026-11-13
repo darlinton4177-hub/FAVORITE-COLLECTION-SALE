@@ -186,10 +186,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           tooltip: 'Sign Out',
                           onPressed: () async {
                             await AuthService.signOut();
-                            await _loadProfile();
                             if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Logged out successfully')),
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (_) => const AuthScreen(isMandatoryGate: true),
+                                ),
+                                (route) => false,
                               );
                             }
                           },
