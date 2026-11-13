@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import '../config/store_config.dart';
 import '../providers/cart_provider.dart';
 import '../providers/store_provider.dart';
+import '../services/auth_service.dart';
 import '../widgets/store_image_widget.dart';
+import 'auth/auth_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
@@ -516,7 +518,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: product.inStock
-                      ? () {
+                      ? () async {
+                          if (!AuthService.isAuthenticated) {
+                            final signedIn = await Navigator.of(context).push<bool>(
+                              MaterialPageRoute(
+                                builder: (_) => const AuthScreen(initialIsSignUp: true),
+                              ),
+                            );
+                            if (signedIn != true) return;
+                          }
                           cartProvider.addToCart(
                             product,
                             quantity: _quantity,
@@ -544,7 +554,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: product.inStock
-                      ? () {
+                      ? () async {
+                          if (!AuthService.isAuthenticated) {
+                            final signedIn = await Navigator.of(context).push<bool>(
+                              MaterialPageRoute(
+                                builder: (_) => const AuthScreen(initialIsSignUp: true),
+                              ),
+                            );
+                            if (signedIn != true) return;
+                          }
                           cartProvider.addToCart(
                             product,
                             quantity: _quantity,

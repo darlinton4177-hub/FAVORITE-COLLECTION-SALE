@@ -26,10 +26,13 @@ class AIMessage {
 class AIAssistantService {
   /// The official system prompt specified for Favorite Collection's AI Shopping Assistant.
   static const String systemPrompt =
-      'You are the dedicated AI Shopping Assistant for Favorite Collection, providing a warm, concise, and helpful shopping experience.\n\n'
-      'You must only listen and respond when the user actively triggers the interaction. After providing your answer, conclude your turn completely and do not resume recording until the user initiates a new session.\n\n'
-      'You possess full knowledge of the inventory, including sale prices and categories like clothing, dresses, jeans, tops, perfumes, and accessories. Highlight policies such as fast shipping from the Ikom hub, 30-day easy returns, and free shipping on orders over ₦50,000 or \$35.\n\n'
-      'Additionally, if requested, you will respond exclusively in Igbo, Yoruba, or Nigerian Pidgin while maintaining your helpful assistant persona.';
+      'You are "Favorite", the dedicated AI Shopping Assistant for Favorite Collection. '
+      'When you greet, state "Hello! I am Favorite." You possess complete knowledge of all items in the shop, '
+      'including oversized blazers, vintage slim taper jeans, crisp Oxford shirts, satin midi slip dresses, '
+      'pleated stretch chinos, combed cotton ribbed crew socks, minimalist low-top leather sneakers, and full-grain leather dress belts, '
+      'along with sale pricing, sizes, fast dispatch from the Ikom hub (2-4 business days), 30-day easy returns, and free shipping over ₦50,000 or \$35 USD. '
+      'Once you welcome the customer, ask what they want, and automatically wait for their reply before responding again. '
+      'Support English, Nigerian Pidgin, Igbo, and Yoruba.';
 
   /// Optional Gemini API Key (can be passed via environment or settings)
   static String? geminiApiKey;
@@ -170,63 +173,63 @@ class AIAssistantService {
       case 'pcm': // Nigerian Pidgin
         if (isShipping) {
           responseText =
-              'No shaking! We dey fast-ship all orders straight from our Ikom hub to anywhere for Nigeria and Cameroon within 2 to 4 days. If your order reach ₦50,000 (or \$35), shipping dey totally FREE for you!';
+              'No shaking! We dey fast-ship all orders straight from our Ikom hub to anywhere for Nigeria and Cameroon within 2 to 4 days. If your order reach ₦50,000 (or \$35), shipping dey totally FREE!\n\nWetin you wan order today?';
         } else if (isReturns) {
           responseText =
-              'We get 30-day easy return policy! As long as the cloth or item never wear out and the original tags still dey body, we go sort you out sharp-sharp.';
+              'We get 30-day easy return policy! As long as the cloth or item never wear out and the original tags still dey body, we go sort you out sharp-sharp.\n\nWetin you wan check out today?';
         } else if (isPerfumes) {
           responseText =
-              'Omo, our perfumes and luxury ouds dey sweet well-well! Royal Amber Oud dey last up to 24 hours. Check am below, e dey available straight from Ikom!';
+              'Omo, our perfumes and luxury ouds dey sweet well-well! Royal Amber Oud dey last up to 24 hours straight from Ikom!\n\nWetin be your favorite scent?';
         } else if (isDeals) {
           responseText =
-              'Better deals boku! Use coupon code FAVORITE10 to collect 10% discount, or SAVE20 for 20% off on big orders. Free shipping still dey for orders from ₦50,000 up!';
+              'Better deals boku! Use coupon code FAVORITE10 to collect 10% discount, or SAVE20 for 20% off. Free shipping still dey for orders from ₦50,000 up!\n\nWetin you wan put for cart?';
         } else if (matchedProducts.isNotEmpty) {
           final p = matchedProducts.first;
           responseText =
-              'See better choice for you: "${p.title}" dey go for ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. Fresh stock ready for dispatch from Ikom hub!';
+              'See better choice for you: "${p.title}" dey go for ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. Fresh stock ready for dispatch from Ikom hub!\n\nWetin you think about this one?';
         } else {
           responseText =
-              'How far! I be your Favorite Collection AI Shopping Assistant. Wetin you wan rock today? We get fine clothing, dresses, jeans, tops, perfumes, and accessories with free delivery on ₦50,000+!';
+              'How far! I am Favorite. Welcome to the shop! I know about everything in our store. Wetin you wan check out today?';
         }
         break;
 
       case 'ig': // Igbo
         if (isShipping) {
           responseText =
-              'Nnọọ! Anyị na-ezipụ ngwaahịa ngwa ngwa site na Ikom hub anyị n\'ime ụbọchị abụọ ruo anọ gafee Nigeria na Cameroon. Ọ bụrụ na ị zụọ ihe ruru ₦50,000 (ma ọ bụ \$35), nzipu bụ n\'efu!';
+              'Nnọọ! Anyị na-ezipụ ngwaahịa ngwa ngwa site na Ikom hub anyị n\'ime ụbọchị abụọ ruo anọ gafee Nigeria na Cameroon. Ọ bụrụ na ị zụọ ihe ruru ₦50,000 (ma ọ bụ \$35), nzipu bụ n\'efu!\n\nKedu ihe ị chọrọ ịtụ taa?';
         } else if (isReturns) {
           responseText =
-              'Anyị nwere iwu nloghachi dị mfe nke ụbọchị 30. Ọ bụrụhaala na eyighị uwe ahụ ma akara ya dịkwa nma, ị nwere ike weghachite ya n\'enweghị nsogbu.';
+              'Anyị nwere iwu nloghachi dị mfe nke ụbọchị 30. Ọ bụrụhaala na eyighị uwe ahụ ma akara ya dịkwa nma, ị nwere ike weghachite ya n\'enweghị nsogbu.\n\nKedu uwe ị chọrọ ịhụ?';
         } else if (isPerfumes) {
           responseText =
-              'Anyị nwere ezigbo mmanụ na-esi ísì ụtọ (perfumes na ouds okomoko). Royal Amber Oud na-anọte aka ma na-esi nnukwu ụtọ. Lee ya n\'okpuru!';
+              'Anyị nwere ezigbo mmanụ na-esi ísì ụtọ (perfumes na ouds okomoko). Royal Amber Oud na-anọte aka ma na-esi nnukwu ụtọ.\n\nỊ chọrọ ka m gosi gị perfumes anyị?';
         } else if (matchedProducts.isNotEmpty) {
           final p = matchedProducts.first;
           responseText =
-              'Lee nhọrọ mara mma: "${p.title}" na-aga maka ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. Ezi ngwaahịa si na Ikom hub!';
+              'Lee nhọrọ mara mma: "${p.title}" na-aga maka ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. Ezi ngwaahịa si na Ikom hub!\n\nKedu ihe ọzọ ị chọrọ?';
         } else {
           responseText =
-              'Nnọọ na Favorite Collection! Abụ m onye enyemaka ịzụ ahịa gị. Kedu ụdị uwe, jeans, akwa nwanyị, ma ọ bụ perfumes ị chọrọ ịzụ taa? Anyị na-enye nzipu n\'efu maka ihe karịrị ₦50,000!';
+              'Nnọọ! Abụ m Favorite. Nnọọ n\'ụlọ ahịa anyị! Ama m banyere ngwaahịa niile dị n\'ime ụlọ ahịa. Kedu ihe ị chọrọ ịhụ taa?';
         }
         break;
 
       case 'yo': // Yoruba
         if (isShipping) {
           responseText =
-              'Ẹ ku abọ! A n fi awọn ọja ranṣẹ ni kiakia lati ibudo Ikom wa si ibikibi ni orilẹ-ede Naijiria ati Cameroon laarin ọjọ meji si mẹrin. Rira to ju ₦50,000 tabi \$35 jẹ ọfẹ ọfẹ!';
+              'Ẹ ku abọ! A n fi awọn ọja ranṣẹ ni kiakia lati ibudo Ikom wa si ibikibi ni orilẹ-ede Naijiria ati Cameroon laarin ọjọ meji si mẹrin. Rira to ju ₦50,000 tabi \$35 jẹ ọfẹ ọfẹ!\n\nKí ni ẹ fẹ ra loni?';
         } else if (isReturns) {
           responseText =
-              'A ni eto ifapada ọja irọrun fun ọjọ ọgbọn (30 days). Niwọn igba ti asọ naa ko ba ti bajẹ ti aami rẹ si wa nibe, o le dapada laisi wahala.';
+              'A ni eto ifapada ọja irọrun fun ọjọ ọgbọn (30 days). Niwọn igba ti asọ naa ko ba ti bajẹ ti aami rẹ si wa nibe, o le dapada laisi wahala.\n\nIru aṣọ wo ni ẹ n wa?';
         } else if (isPerfumes) {
           responseText =
-              'Awọn lofinda ati olofinda oud wa dara pupọ! Royal Amber Oud n gba oorun didun to pẹ to wakati 24. Ṣayẹwo rẹ ni isalẹ!';
+              'Awọn lofinda ati olofinda oud wa dara pupọ! Royal Amber Oud n gba oorun didun to pẹ to wakati 24.\n\nṢe ẹ fẹ ki n ṣe iṣeduro lofinda fun yin?';
         } else if (matchedProducts.isNotEmpty) {
           final p = matchedProducts.first;
           responseText =
-              'Wo aṣayan to dara yi: "${p.title}" wa fun ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. O wa ni imurasilẹ lati ibudo Ikom!';
+              'Wo aṣayan to dara yi: "${p.title}" wa fun ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. O wa ni imurasilẹ lati ibudo Ikom!\n\nKí ni ẹ ro nipa eyi?';
         } else {
           responseText =
-              'Ẹ ku abọ si Favorite Collection! Emi ni oluranlọwọ rira ọja yin. Iru aṣọ, bata, jeans, tabi lofinda wo ni ẹ n wa loni? A ni gbigbe ọfẹ fun awọn rira to ju ₦50,000 lọ!';
+              'Ẹ ku abọ! Emi ni Favorite. Ẹ ku abọ si ile itaja wa! Mo mọ gbogbo ohun ti o wa ninu itaja wa. Kí ni ẹ fẹ wa loni?';
         }
         break;
 
@@ -234,35 +237,35 @@ class AIAssistantService {
       default:
         if (isShipping) {
           responseText =
-              'All orders are dispatched swiftly from our centralized Ikom hub, delivering across Nigeria and Cameroon within 2–4 business days. We offer FREE shipping on all orders over ₦50,000 (or \$35 USD)!';
+              'All orders are dispatched swiftly from our centralized Ikom hub, delivering across Nigeria and Cameroon within 2–4 business days. We offer FREE shipping on all orders over ₦50,000 (or \$35 USD)!\n\nWhat items would you like to order today?';
         } else if (isReturns) {
           responseText =
-              'Shop with complete confidence! Favorite Collection offers a 30-day hassle-free return policy on all unworn items with original tags intact.';
+              'Shop with complete confidence! Favorite Collection offers a 30-day hassle-free return policy on all unworn items with original tags intact.\n\nWhat items can I help style for you today?';
         } else if (isPerfumes) {
           responseText =
-              'Explore our curated collection of luxury fragrances, including our bestseller Royal Amber & Oud Eau De Parfum with 24-hour longevity. Dispatched directly from our Ikom hub!';
+              'Explore our curated collection of luxury fragrances with 24-hour longevity, dispatched directly from our Ikom hub!\n\nWould you like me to recommend a fragrance for you?';
         } else if (isAccessories) {
           responseText =
-              'Our fashion accessories feature handcrafted full-grain leather belts, designer sunglasses, and premium caps tailored to complete your look.';
+              'Our fashion accessories feature handcrafted full-grain leather belts, designer sunglasses, and premium caps tailored to complete your look.\n\nWhat kind of accessory are you looking for?';
         } else if (isDresses) {
           responseText =
-              'We carry gorgeous floral midi, tailored evening gowns, and effortless casual dresses crafted with premium breathable fabrics.';
+              'We carry gorgeous satin midi slip dresses and elegant gowns crafted with premium breathable fabrics.\n\nWhat style or color dress are you looking for?';
         } else if (isJeans) {
           responseText =
-              'Our denim collection features premium slim-taper, raw selvedge, and relaxed distressed fits with flexible stretch comfort.';
+              'Our denim collection features vintage washed slim taper jeans with flexible stretch comfort.\n\nWhat size jeans do you wear?';
         } else if (isTops) {
           responseText =
-              'Discover our tailored blazers, crisp Oxford button-downs, and heavyweight casual tees for everyday elegance.';
+              'Discover our tailored oversized blazers and crisp Oxford button-downs for everyday elegance.\n\nWhat type of top or blazer do you prefer?';
         } else if (isDeals) {
           responseText =
-              'Enjoy incredible savings! Apply coupon code FAVORITE10 for 10% off your entire cart, or SAVE20 for 20% off qualifying orders. Plus, get free shipping when you spend over ₦50,000!';
+              'Enjoy incredible savings! Apply coupon code FAVORITE10 for 10% off your entire cart, or SAVE20 for 20% off. Plus, get free shipping when you spend over ₦50,000!\n\nWhat items are in your cart today?';
         } else if (matchedProducts.isNotEmpty) {
           final p = matchedProducts.first;
           responseText =
-              'I recommend checking out "${p.title}" at ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. It is in stock and ready for fast dispatch from our Ikom hub!';
+              'I recommend checking out "${p.title}" at ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. It is in stock and ready for fast dispatch from our Ikom hub!\n\nWould you like more details or another recommendation?';
         } else {
           responseText =
-              'Welcome to Favorite Collection! I am your dedicated shopping assistant. I have full knowledge of our catalog across clothing, dresses, jeans, tops, perfumes, and accessories. How can I help style you today?';
+              'Hello! I am Favorite. Welcome to the shop! I know about everything in our store, including blazers, jeans, tops, dresses, chinos, socks, footwear, and accessories. What would you like to find today?';
         }
         break;
     }

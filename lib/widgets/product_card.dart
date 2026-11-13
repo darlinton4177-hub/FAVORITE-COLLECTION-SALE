@@ -4,7 +4,9 @@ import '../config/store_config.dart';
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
 import '../providers/store_provider.dart';
+import '../screens/auth/auth_screen.dart';
 import '../screens/product_detail_screen.dart';
+import '../services/auth_service.dart';
 import 'store_image_widget.dart';
 
 class ProductCard extends StatelessWidget {
@@ -209,7 +211,16 @@ class ProductCard extends StatelessWidget {
                           ),
                         ),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            if (!AuthService.isAuthenticated) {
+                              final signedIn = await Navigator.of(context).push<bool>(
+                                MaterialPageRoute(
+                                  builder: (_) => const AuthScreen(initialIsSignUp: true),
+                                ),
+                              );
+                              if (signedIn != true) return;
+                            }
+
                             cartProvider.addToCart(
                               product,
                               quantity: 1,

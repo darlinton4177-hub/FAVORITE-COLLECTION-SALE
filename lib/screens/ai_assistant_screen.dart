@@ -32,25 +32,22 @@ class _AIAssistantScreenState extends State<AIAssistantScreen>
       duration: const Duration(milliseconds: 1000),
     )..repeat(reverse: true);
 
-    // Initial greeting message from the AI Assistant
+    // Initial greeting message from the AI Assistant (Explicitly named "Favorite")
     _messages.add(
       AIMessage(
         id: 'welcome',
         text:
-            'Hello! I am your dedicated AI Shopping Assistant for Favorite Collection. '
-            'I have full knowledge of our live fashion inventory, perfumes, and accessories.\n\n'
-            '🚚 Fast dispatch directly from our Ikom hub (2-4 days)\n'
-            '🔄 30-day hassle-free returns\n'
-            '🏷️ FREE shipping on orders over ₦50,000 (or \$35 USD)\n\n'
-            'How can I help style you today? You can also ask in Pidgin, Igbo, or Yoruba!',
+            'Hello! I am Favorite.\n\n'
+            'Welcome to the shop! I know about everything in our store—from our oversized blazers, slim taper jeans, and satin midi slip dresses to shoes, accessories, and fast 2–4 day delivery from our Ikom hub.\n\n'
+            'What would you like to find today?',
         isUser: false,
         timestamp: DateTime.now(),
         suggestions: const [
-          '🚚 Shipping from Ikom Hub',
-          '🔄 30-Day Return Policy',
-          '🌸 Perfumes & Fragrances',
           '👗 Dresses & Tops Deals',
+          '👖 Jeans & Blazers',
+          '🚚 Shipping from Ikom Hub',
           '🏷️ Free Shipping (₦50k / \$35)',
+          '🔄 30-Day Returns Policy',
         ],
       ),
     );
@@ -139,20 +136,20 @@ class _AIAssistantScreenState extends State<AIAssistantScreen>
     switch (lang) {
       case 'pcm':
         greeting =
-            'How far! I don switch to Nigerian Pidgin. Wetin you wan rock today? Ask me about clothes, perfumes, or how we dey ship from Ikom hub!';
+            'How far! I am Favorite. Welcome to the shop! I know about everything inside store. Wetin you wan check out today?';
         break;
       case 'ig':
         greeting =
-            'Nnọọ! Asụsụ gbanwere gaa na Igbo. Kedu uwe, perfumes ma ọ bụ ngwa ahịa ị chọrọ ịhụ? Nzipu anyị si na Ikom hub na-aga ngwa ngwa!';
+            'Nnọọ! Abụ m Favorite. Nnọọ n\'ụlọ ahịa anyị! Ama m banyere ngwaahịa niile dị n\'ime ụlọ ahịa. Kedu ihe ị chọrọ ịhụ taa?';
         break;
       case 'yo':
         greeting =
-            'Ẹ ku abọ! Mo ti yi ede pada si Yoruba. Iru aṣọ, bata, tabi lofinda wo ni ẹ n wa? Gbigbe wa lati ibudo Ikom jẹ kiakia!';
+            'Ẹ ku abọ! Emi ni Favorite. Ẹ ku abọ si ile itaja wa! Mo mọ gbogbo ohun ti o wa ninu itaja wa. Kí ni ẹ fẹ wa loni?';
         break;
       case 'en':
       default:
         greeting =
-            'Language switched to English. How can I assist with your Favorite Collection shopping today?';
+            'Hello! I am Favorite. Welcome to the shop! I know about everything in our store. What would you like to find today?';
         break;
     }
     setState(() {
