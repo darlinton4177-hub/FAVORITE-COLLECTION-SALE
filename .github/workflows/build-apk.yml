@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -39,6 +41,14 @@ jobs:
       - name: Run Tests
         run: flutter test
 
+      - name: Build Web Application
+        run: flutter build web --release --base-href "/FAVORITE-COLLECTION-SALE/"
+
+      - name: Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
       - name: Build Android Debug APK
         run: flutter build apk --debug --android-skip-build-dependency-validation
 
@@ -65,14 +75,30 @@ jobs:
 
             This official release was compiled directly from the `main` branch with live Supabase backend integration.
 
+            🌐 **Live Website:** https://darlinton4177-hub.github.io/FAVORITE-COLLECTION-SALE/
+
             ### Included in this build:
             - Live Supabase backend integration (products, categories, banners, coupons, exchange rates).
             - Official Favorite Collection brand logo and launcher icons.
             - Authentic NGN (₦) currency formatting across catalogue, cart, and checkout.
             - User authentication and live profile management via Supabase Auth.
             - Secure store administration console.
+            - AI Shopping Assistant (English, Pidgin, Igbo, Yoruba).
 
             **Download the attached APK below to install on your Android device.**
           files: build/app/outputs/flutter-apk/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
