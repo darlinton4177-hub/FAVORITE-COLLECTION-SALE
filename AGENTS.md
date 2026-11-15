@@ -13,9 +13,9 @@ This repository contains the Flutter Android application **Favorite Collection S
 3. **Image Management (v1.1 Enhanced):**
    - Customer-facing screens use `StoreImageWidget`, which gracefully displays bundled asset paths, imported local file paths, and high-quality Flutter placeholder fallbacks.
    - Administrators can select bundled asset imagery or import custom photos directly using the Android system Photo Picker (`image_picker`). Imported photos are copied into the permanent local app documents directory (`/imported_images`).
-4. **Hidden Demonstration Admin Console:**
-   - Accessed from the Account screen via the demo tile or by tapping 3 times on the admin button.
-   - Default demonstration PIN: `1234`.
+4. **Administrator Portal:**
+   - Secured by Supabase Auth and database role-based access control (`profiles.role = 'admin'`).
+   - No hardcoded PINs or client-side bypasses. Fully protected by database Row Level Security (RLS).
 
 ## Testing & CI/CD
 - Run `flutter analyze` for static analysis.

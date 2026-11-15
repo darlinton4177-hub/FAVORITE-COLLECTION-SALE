@@ -9,7 +9,6 @@ import '../models/banner_item.dart';
 import '../models/order.dart';
 import '../models/user_profile.dart';
 // DemoStoreData is only used in debug mode — never imported for production fallback
-import '../data/demo_store_data.dart';
 
 class LocalStorageService {
   static const String keyProducts = 'fcs_products';
@@ -66,13 +65,6 @@ class LocalStorageService {
         debugPrint('[LocalStorage] Error decoding cached products: $e');
       }
     }
-    // In debug mode, seed with demo data so the app is usable offline.
-    // In release, return empty — the UI will show an error/retry banner.
-    if (kDebugMode) {
-      final initial = DemoStoreData.getInitialProducts();
-      await saveProducts(initial);
-      return initial;
-    }
     return [];
   }
 
@@ -95,11 +87,6 @@ class LocalStorageService {
         debugPrint('[LocalStorage] Error decoding cached categories: $e');
       }
     }
-    if (kDebugMode) {
-      final initial = DemoStoreData.getInitialCategories();
-      await saveCategories(initial);
-      return initial;
-    }
     return [];
   }
 
@@ -121,11 +108,6 @@ class LocalStorageService {
       } catch (e) {
         debugPrint('[LocalStorage] Error decoding cached banners: $e');
       }
-    }
-    if (kDebugMode) {
-      final initial = DemoStoreData.getInitialBanners();
-      await saveBanners(initial);
-      return initial;
     }
     return [];
   }

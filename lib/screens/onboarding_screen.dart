@@ -32,7 +32,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       'icon': Icons.verified_user_rounded,
       'title': 'Live Marketplace Shopping',
       'desc':
-          'Directly synchronized with Supabase cloud catalog, real-time deals, and multi-currency pricing in NGN & XAF.',
+          'Directly synchronized with real-time cloud catalog, live deals, and multi-currency pricing in NGN & XAF.',
     },
   ];
 

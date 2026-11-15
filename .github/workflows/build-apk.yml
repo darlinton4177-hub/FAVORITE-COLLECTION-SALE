@@ -72,7 +72,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'FavoriteCollection2026!' }}
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD || 'FavoriteCollection2026!' }}
         run: |
-          flutter build apk --release --build-name=1.0.0 --build-number=${GITHUB_RUN_NUMBER} --android-skip-build-dependency-validation
+          flutter build apk --release --build-name=1.0.1 --build-number=${GITHUB_RUN_NUMBER} --android-skip-build-dependency-validation
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -83,7 +83,7 @@ jobs:
       - name: Create Unique Release Tag
         id: release_tag
         run: |
-          TAG_NAME="v1.0.0-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}"
+          TAG_NAME="v1.0.1-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}"
           echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Publish GitHub Release with APK

@@ -26,12 +26,12 @@ class AIMessage {
 class AIAssistantService {
   /// The official system prompt specified for Favorite Collection's AI Shopping Assistant.
   static const String systemPrompt =
-      'You are "Favorite", the dedicated AI Shopping Assistant for Favorite Collection. '
-      'When you greet, state "Hello! I am Favorite." You possess complete knowledge of all items in the shop, '
-      'including oversized blazers, vintage slim taper jeans, crisp Oxford shirts, satin midi slip dresses, '
-      'pleated stretch chinos, combed cotton ribbed crew socks, minimalist low-top leather sneakers, and full-grain leather dress belts, '
-      'along with sale pricing, sizes, fast dispatch from the Ikom hub (2-4 business days), 30-day easy returns, and free shipping over ₦50,000 or \$35 USD. '
-      'Once you welcome the customer, ask what they want, and automatically wait for their reply before responding again. '
+      'You are "Favorite", the dedicated Customer Service Shopping Agent for Favorite Collection. '
+      'When greeting customers, state: "Hello! I am Favorite." '
+      'You possess complete knowledge of all items in the store, including oversized blazers, vintage slim taper jeans, crisp Oxford shirts, satin midi slip dresses, pleated stretch chinos, combed cotton ribbed crew socks, minimalist low-top leather sneakers, and full-grain leather dress belts. '
+      'You assist customers with sale pricing, available sizes, fast delivery from the Ikom hub (2-4 business days), 30-day returns, and free shipping over ₦50,000 or \$35 USD. '
+      'CRITICAL TOPIC CONSTRAINT: You must ONLY discuss customer service and fashion shopping concerning Favorite Collection. You are strictly forbidden from discussing technical internals, backend systems, databases, Supabase, servers, hosting, APIs, code, credentials, or administrative architecture. If asked about technical details, politely redirect the customer back to our clothing collections. '
+      'Always speak in a professional, courteous customer service tone and wait for the customer to reply before responding again. '
       'Support English, Nigerian Pidgin, Igbo, and Yoruba.';
 
   /// Optional Gemini API Key (can be passed via environment or settings)
@@ -138,6 +138,30 @@ class AIAssistantService {
     required List<Category> categories,
     required String lang,
   }) {
+    final isTechOrBackend = query.contains('backend') ||
+        query.contains('supabase') ||
+        query.contains('database') ||
+        query.contains('server') ||
+        query.contains('hosting') ||
+        query.contains('host') ||
+        query.contains('sql') ||
+        query.contains('api') ||
+        query.contains('token') ||
+        query.contains('pin') ||
+        query.contains('code') ||
+        query.contains('infrastructure');
+
+    if (isTechOrBackend) {
+      return AIMessage(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        text:
+            'Hello! I am Favorite, your customer service shopping agent. I am dedicated exclusively to helping you find the perfect fashion items, sizes, current sale deals, 2–4 day delivery from our Ikom hub, and 30-day returns. What fashion items can I help you find today?',
+        isUser: false,
+        timestamp: DateTime.now(),
+        suggestions: _getSuggestionsForLang(lang),
+      );
+    }
+
     final matchedProducts = _findRelevantProducts(query, products);
     String responseText;
 

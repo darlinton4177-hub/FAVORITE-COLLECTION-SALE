@@ -20,8 +20,9 @@ Inspired by the intuitive product discovery and clear merchandising of modern mu
 
 ---
 
-## 🛠️ Hidden Demonstration Administrator Panel
-- **Secure Demo Access:** Access from the Account / Profile screen with demonstration PIN `1234`.
+## 🛠️ Production Administrator Panel
+- **Role-Based Access:** Accessible exclusively after authenticating with a verified administrator account (`profiles.role = 'admin'`).
+- **Row Level Security (RLS):** All catalog management operations (products, categories, banners) are guarded at the database level. No hardcoded client-side PINs.
 - **Admin Dashboard:** Store overview displaying revenue, placed demo orders, catalog count, and low stock warnings.
 - **Product Management:** Add, edit, or delete products with custom pricing, descriptions, stock quantities, sizes, and colors.
 - **Android Phone Gallery Photo Selection:** Pick photos directly from the Android System Photo Picker (`image_picker`) or choose from bundled catalog assets. Selected photos are permanently copied to internal app storage so they persist across app launches.

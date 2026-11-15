@@ -21,11 +21,8 @@ class StoreConfig {
   static const double estimatedTaxRate = 0.075;         // 7.5% VAT
 
   // AI Shopping Assistant Branding
-  static const String aiAssistantName = 'Favorite AI';
-  static const String aiAssistantTagline = 'Dedicated Shopping Assistant';
-
-  // Admin PIN (change before production deployment)
-  static const String demoAdminPin = '1234';
+  static const String aiAssistantName = 'Favorite';
+  static const String aiAssistantTagline = 'Customer Service Shopping Agent';
 
   // Primary Theme Colors (Material 3 with Temu/Jumia warm energetic vibrancy & modern sleek chic)
   static const Color primaryColor = Color(0xFFE65100);   // Warm vibrant orange/terracotta
@@ -42,7 +39,7 @@ class StoreConfig {
   static const String shippingPolicy =
       'Fast dispatch directly from our Ikom hub across Nigeria and Cameroon (2-4 business days). Express delivery available. Free shipping on orders over ₦50,000 or \$35.';
   static const String privacyPolicy =
-      'We respect your privacy. All customer data and payment transactions are secured with Supabase enterprise encryption.';
+      'We respect your privacy. All customer data and payment transactions are secured with enterprise-grade 256-bit encryption.';
   static const String termsOfService =
       'Favorite Collection provides premium marketplace shopping with multi-currency checkout in NGN and XAF.';
 }

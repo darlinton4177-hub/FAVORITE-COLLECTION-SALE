@@ -21,7 +21,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _secretTapCount = 0;
   Map<String, dynamic>? _liveProfile;
 @override
   void initState() {
@@ -48,26 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _onAdminSecretTap() {
-    _secretTapCount++;
-    if (_secretTapCount >= 3) {
-      _secretTapCount = 0;
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const AdminLoginScreen()));
-    } else {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${3 - _secretTapCount} more taps to open Admin Panel',
-          ),
-          duration: const Duration(seconds: 1),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -369,14 +349,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
 
             
-            // DIAGNOSTICS & SYSTEM STATUS
-            Consumer<StoreProvider>(
+            // DIAGNOSTICS & SYSTEM STATUS (Restricted to Store Owner / Admin Only)
+            if (isAdmin)
+              Consumer<StoreProvider>(
               builder: (context, store, _) {
                 final sourceColor = store.dataSource == DataSource.live
                     ? Colors.green
                     : (store.dataSource == DataSource.cached ? Colors.orange : Colors.red);
                 final sourceLabel = store.dataSource == DataSource.live
-                    ? 'LIVE (Supabase)'
+                    ? 'LIVE'
                     : (store.dataSource == DataSource.cached ? 'CACHED (Offline)' : 'ERROR / OFFLINE');
 
                 return Container(
@@ -419,8 +400,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       const Divider(height: 16),
-                      _buildDiagRow('App Version', 'v1.0.0+1 (Release)'),
-                      _buildDiagRow('Backend Host', Uri.parse(SupabaseConfig.url).host),
+                      _buildDiagRow('App Version', 'v1.0.1+21 (Release)'),
+                      _buildDiagRow('Cloud Sync Host', 'Favorite Collection Cloud'),
                       _buildDiagRow(
                         'Rows Synced',
                         'Categories: ${store.categoriesFetched} | Products: ${store.productsFetched} | Banners: ${store.bannersFetched}',
@@ -481,13 +462,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 16),
             Text(
-              '${StoreConfig.appName} v1.0.0 (Template v1.1)',
+              '${StoreConfig.appName} • ${StoreConfig.appTagline}',
               style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Supabase Connected • Nigeria (NGN) & Cameroon (XAF)',
-              style: TextStyle(fontSize: 11, color: Colors.grey),
             ),
             const SizedBox(height: 40),
           ],
