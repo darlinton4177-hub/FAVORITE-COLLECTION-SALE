@@ -1,4 +1,3 @@
-import '../config/supabase_config.dart';
 import '../providers/store_provider.dart';
 import '../services/supabase_store_service.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import '../services/auth_service.dart';
 import 'auth/auth_screen.dart';
 import 'order_history_screen.dart';
 import 'wishlist_screen.dart';
-import 'admin/admin_login_screen.dart';
 import 'admin/admin_dashboard_screen.dart';
 import 'ai_assistant_screen.dart';
 
