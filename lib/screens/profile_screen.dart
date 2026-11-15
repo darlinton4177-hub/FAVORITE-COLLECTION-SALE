@@ -326,29 +326,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             const SizedBox(height: 12),
 
-            // Secret Admin Panel fallback (for non-admin users)
-            if (!isAdmin)
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.blueGrey.withValues(alpha: 0.3),
-                  ),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.admin_panel_settings_outlined,
-                    color: Colors.blueGrey,
-                  ),
-                  title: const Text('Store Administration'),
-                  subtitle: const Text(
-                    'Tap 3 times or click to access the admin panel',
-                  ),
-                  onTap: _onAdminSecretTap,
-                ),
-              ),
-
-            
             // DIAGNOSTICS & SYSTEM STATUS (Restricted to Store Owner / Admin Only)
             if (isAdmin)
               Consumer<StoreProvider>(
