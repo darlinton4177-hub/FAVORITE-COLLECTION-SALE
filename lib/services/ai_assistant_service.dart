@@ -143,12 +143,11 @@ class AIAssistantService {
         query.contains('database') ||
         query.contains('server') ||
         query.contains('hosting') ||
-        query.contains('host') ||
         query.contains('sql') ||
-        query.contains('api') ||
+        query.contains('api key') ||
         query.contains('token') ||
-        query.contains('pin') ||
-        query.contains('code') ||
+        query.contains('admin pin') ||
+        query.contains('source code') ||
         query.contains('infrastructure');
 
     if (isTechOrBackend) {
@@ -213,7 +212,7 @@ class AIAssistantService {
               'See better choice for you: "${p.title}" dey go for ${StoreConfig.currencySymbol}${p.price.toStringAsFixed(2)}. Fresh stock ready for dispatch from Ikom hub!\n\nWetin you think about this one?';
         } else {
           responseText =
-              'How far! I am Favorite. Welcome to the shop! I know about everything in our store. Wetin you wan check out today?';
+              'How far! I am Favorite from ${StoreConfig.appName}. Welcome to the shop! I know about everything in our store. Wetin you wan check out today?';
         }
         break;
 
